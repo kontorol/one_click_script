@@ -43,14 +43,14 @@ function testWARPEnabled(){
 
     if [[ -f "${configWARPPortFilePath}" ]]; then
         configWARPPortLocalServerPort="$(cat ${configWARPPortFilePath})"
-        yellow "检测到本机已安装 WARP Sock5, 端口号 ${configWARPPortLocalServerPort}"
+        yellow "Detected that the machine has installed WARP Sock5, port number ${configWARPPortLocalServerPort}"
         echo
     fi
 
     if [[  "$isAutoRefreshWarp" == "true" ]]; then
         warpPortInput="${configWARPPortLocalServerPort}"
     else
-        read -p "请输入WARP Sock5 端口号? 直接回车默认${configWARPPortLocalServerPort}, 请输入纯数字:" warpPortInput
+        read -p "Please enter the WARP Sock5 port number? Press Enter to default ${configWARPPortLocalServerPort}, Please enter pure numbers:" warpPortInput
         warpPortInput=${warpPortInput:-$configWARPPortLocalServerPort}
     fi
     echo
@@ -80,23 +80,23 @@ function testNetflixAll(){
     curlInfo="IPv4"
 
     if [[ $1 == "ipv4" ]]; then
-        bold " 开始测试本机的IPv4 解锁 Netflix 情况"
+        bold " Start testing native IPv4 unblocking Netflix"
         curlCommand="${curlCommand} -4"
         curlInfo="IPv4"
 
     elif [[ $1 == "ipv4warp" ]]; then
 
-        read -r -p "是否测试本机 IPv4 WARP Sock5 代理? 直接回车默认不测试 请输入[y/N]:" isIpv4WARPContinueInput
+        read -r -p "Do you want to test the local IPv4 WARP Sock5 proxy? Enter directly and do not test by default. Please enter [y/N]:" isIpv4WARPContinueInput
         isIpv4WARPContinueInput=${isIpv4WARPContinueInput:-n}
 
         if [[ ${isIpv4WARPContinueInput} == [Nn] ]]; then
-            red " 已退出本机 IPv4 WARP Sock5 代理测试"
+            red " Exited native IPv4 WARP Sock5 proxy test"
             echo
             return
         else
             testWARPEnabled
 
-            bold " 开始测试本机的IPv4 通过CloudFlare WARP 解锁 Netflix 情况"
+            bold " Start testing native IPv4 unblocking Netflix via CloudFlare WARP"
             curlCommand="${curlCommand} -x socks5h://127.0.0.1:${warpPortInput}"
             curlInfo="IPv4 CloudFlare WARP"
         fi
@@ -105,22 +105,22 @@ function testNetflixAll(){
     elif [[ $1 == "ipv6" ]]; then
 
         if [[ "${isIPV6Enabled}" == "false" ]]; then
-            red " 本机IPv6 没有开启 是否继续测试IPv6 "
-            read -r -p "是否继续测试IPv6? 直接回车默认不继续测试 请输入[y/N]:" isIpv6ContinueInput
+            red " The local IPv6 is not turned on. Do you want to continue to test IPv6? "
+            read -r -p "Do you want to continue testing IPv6? Press Enter by default and do not continue testing, please enter [y/N]:" isIpv6ContinueInput
             isIpv6ContinueInput=${isIpv6ContinueInput:-n}
 
             if [[ ${isIpv6ContinueInput} == [Nn] ]]; then
-                red " 已退出 本机IPv6 测试 "
+                red " Exited native IPv6 test "
                 echo
                 return
             else
                 echo
-                bold " 开始测试本机的IPv6 解锁 Netflix 情况"
+                bold " Start testing native IPv6 unblocking Netflix"
                 curlCommand="${curlCommand} -6"
                 curlInfo="IPv6"
             fi
         else
-                bold " 开始测试本机的IPv6 解锁 Netflix 情况"
+                bold " Start testing native IPv6 unblocking Netflix"
                 curlCommand="${curlCommand} -6"
                 curlInfo="IPv6"
 
@@ -128,17 +128,17 @@ function testNetflixAll(){
 
 
     elif [[ $1 == "ipv6warp" ]]; then
-        bold " 开始测试本机的IPv6 通过CloudFlare WARP 解锁 Netflix 情况"
+        bold " Start testing native IPv6 unblocking Netflix via CloudFlare WARP"
         curlCommand="${curlCommand} -6"
         curlInfo="IPv6 CloudFlare WARP"
 
     else
-        red " 没有选择要进行的测试 已退出! "
+        red " No tests selected to run Exited! "
         return
 
     fi
 
-    # curl 参数说明
+    # curl Parameter Description
     # --connect-timeout <seconds> Maximum time allowed for connection
     # -4, --ipv4          Resolve names to IPv4 addresses
     # -s, --silent        Silent mode
@@ -166,20 +166,20 @@ function testNetflixOneMethod(){
         resultIndex=$($1 -S ${netflixLinkIndex} 2>&1)
         
         if [[ "${resultIndex}" == "curl"* ]];then
-            red " 网络错误 无法打开 Netflix 网站"
+            red " Network error Unable to open Netflix website"
             return
         fi
         
         if [[ -z "${resultIndex}" ]];then
             resultIndex2=$($1 -S ${netflixLinkIndex} 2>&1)
             if [[ -z "${resultIndex2}" ]];then
-                red " 已被 Netflix 屏蔽, 403 访问错误 "
+                red " blocked by Netflix, 403 access error "
                 return
             fi
         fi
 
         if [ "${resultIndex}" == "Not Available" ];then
-            red " Netflix 不提供此地区服务 "
+            red " Netflix is not available in this region "
             if [[  "$isAutoRefreshWarp" == "true" ]]; then
                 echo
             else
@@ -196,7 +196,7 @@ function testNetflixOneMethod(){
         resultOwn=$($1 -S ${netflixLinkIndex} 2>&1)
 
         if [[ "${resultOwn}" == *"page-404"* ]] || [[ "${resultOwn}" == *"NSEZ-403"* ]];then
-            red " 本机 $2 不能播放 Netflix 任何剧集"
+            red " native $2 Can't stream any Netflix episodes"
             return
         fi
 
@@ -220,11 +220,11 @@ function testNetflixOneMethod(){
         result7=$($1 -S "https://www.netflix.com/title/70305903" 2>&1)
 
         if [[ "$result1" == *"page-404"* ]] && [[ "$result2" == *"page-404"* ]] && [[ "$result3" == *"page-404"* ]] && [[ "$result4" == *"page-404"* ]] && [[ "$result5" == *"page-404"* ]] && [[ "$result6" == *"page-404"* ]]; then
-            yellow " 本机 $2 仅解锁 Netflix 自制剧, 无法播放非自制剧. 区域: ${netflixRegion}"
+            yellow " native $2 Unblocks only Netflix-produced series, not non-produced series. Regions: ${netflixRegion}"
             
             if [[ $2 == "IPv4 CloudFlare WARP Refresh" ]]; then
                 echo
-                green " 重启Warp 用于刷新能解锁IP, $2"
+                green " Restart Warp to refresh to unlock IP, $2"
                 warp_restart
                 sleep 2
                 
@@ -233,11 +233,11 @@ function testNetflixOneMethod(){
             return
         fi
 
-        green " 恭喜 本机 $2 解锁 Netflix 全部剧集 包括非自制剧. 区域: ${netflixRegion} "
+        green " Congrats Native $2 Unlocks All Netflix Shows Including Non-Made Shows. Regions: ${netflixRegion} "
         return
 
     else
-        red " 要进行的测试 Url为空! "
+        red " The test to be run Url is empty! "
     fi
 
 
@@ -262,7 +262,7 @@ function warp_restart(){
         sleep 2
 
     fi
-    green " 已经完成 重启Warp "
+    green " Done Restart Warp "
 }
 
 
@@ -283,7 +283,7 @@ function autoRefreshWarpIP(){
 
         echo 
         time=$(date "+%Y-%m-%d %H:%M:%S")
-        green " $time 开始自动刷新 WARP IP, 默认尝试20次 此次为第${counter}次"
+        green " $time Start to refresh WARP IP automatically, try 20 times by default, this is the first time ${counter} Second-rate"
         echo
         curlCommand="curl --connect-timeout 10 -sL"
         curlInfo="IPv4 CloudFlare WARP Refresh"
@@ -291,10 +291,10 @@ function autoRefreshWarpIP(){
         
 
         if [ -f /usr/bin/warp-cli ]; then
-            bold " 开始测试本机的IPv4 通过CloudFlare WARP sock5 解锁 Netflix 情况"
+            bold " Start to test the IPv4 pass of the machine CloudFlare WARP sock5 Unblock Netflix situation"
             curlCommand="${curlCommand} -x socks5h://127.0.0.1:${warpPortInput}"
         else
-            bold " 开始测试本机的IPv6 通过CloudFlare WARP 解锁 Netflix 情况"
+            bold " Start testing native IPv6 unblocking Netflix via CloudFlare WARP"
             curlCommand="${curlCommand} -6"
         fi
         
@@ -334,19 +334,19 @@ function testYoutubeAll(){
     curlInfo="IPv4"
 
     if [[ $1 == "ipv4" ]]; then
-        bold " 开始测试本机的IPv4 解锁 Youtube Premium 情况"
+        bold " Start testing the native IPv4 unblocking Youtube Premium situation"
         curlCommand="${curlCommand} -4"
         curlInfo="IPv4"
 
     elif [[ $1 == "ipv4warp" ]]; then
 
         if [[ ${isIpv4WARPContinueInput} == [Nn] ]]; then
-            red " 已退出本机 IPv4 WARP Sock5 代理测试"
+            red " Exited native IPv4 WARP Sock5 proxy test"
             echo
             return
         else
 
-            bold " 开始测试本机的IPv4 通过CloudFlare WARP 解锁 Youtube Premium 情况"
+            bold " Start testing the local IPv4 Unblock Youtube Premium situation through CloudFlare WARP"
             curlCommand="${curlCommand} -x socks5h://127.0.0.1:${warpPortInput}"
             curlInfo="IPv4 CloudFlare WARP"
         fi
@@ -356,33 +356,33 @@ function testYoutubeAll(){
         if [[ "${isIPV6Enabled}" == "false" ]]; then
 
             if [[ ${isIpv6ContinueInput} == [Nn] ]]; then
-                red " 已退出 本机IPv6 测试 "
+                red " Exited native IPv6 test "
                 echo
                 return
             else
-                bold " 开始测试本机的IPv6 解锁 Youtube Premium 情况"
+                bold " Start testing the native IPv6 unblocking Youtube Premium situation"
                 curlCommand="${curlCommand} -6"
                 curlInfo="IPv6"
             fi
         else
-                bold " 开始测试本机的IPv6 解锁 Youtube Premium 情况"
+                bold " Start testing the native IPv6 unblocking Youtube Premium situation"
                 curlCommand="${curlCommand} -6"
                 curlInfo="IPv6"
 
         fi
 
     elif [[ $1 == "ipv6warp" ]]; then
-        bold " 开始测试本机的IPv6 通过CloudFlare WARP 解锁 Youtube Premium 情况"
+        bold " Start testing the local IPv6 Unblock Youtube Premium situation through CloudFlare WARP"
         curlCommand="${curlCommand} -6"
         curlInfo="IPv6 CloudFlare WARP"
 
     else
-        red " 没有选择要进行的测试 已退出! "
+        red " No tests selected to run Exited! "
         return
 
     fi
 
-    # curl 参数说明
+    # curl Parameter Description
     # --connect-timeout <seconds> Maximum time allowed for connection
     # -4, --ipv4          Resolve names to IPv4 addresses
     # -s, --silent        Silent mode
@@ -405,20 +405,20 @@ function testYoutubeOneMethod(){
         resultYoutubeIndex=$($1 -S ${youtubeLinkRed} 2>&1)
   
         if [[ "${resultYoutubeIndex}" == "curl"* ]];then
-            red " 网络错误 无法打开 YouTube 网站"
+            red " Network error Unable to open YouTube website"
             return
         fi
 
         resultYoutube=$($1 ${youtubeLinkRed} | sed 's/,/\n/g' | grep countryCode | cut -d '"' -f4)
 
         if [ ! -n "${resultYoutube}" ]; then
-            yellow " YouTube 角标不显示 可能不支持 YouTube Premium"
+            yellow " YouTube banner not showing YouTube Premium may not be supported"
         else
-            green " 本机 $2 支持 YouTube Premium, 角标: ${resultYoutube}"
+            green " Native $2 support for YouTube Premium, banners: ${resultYoutube}"
         fi
 
     else
-        red " 要进行的测试 Url为空! "
+        red " The test to be run Url is empty! "
     fi
 
 }
@@ -446,19 +446,19 @@ function testDisneyPlusAll(){
     curlInfo="IPv4"
 
     if [[ $1 == "ipv4" ]]; then
-        bold " 开始测试本机的IPv4 解锁 Disney+ 情况"
+        bold " Start testing the local IPv4 unlock Disney+ situation"
         curlCommand="${curlCommand} -4"
         curlInfo="IPv4"
 
     elif [[ $1 == "ipv4warp" ]]; then
 
         if [[ ${isIpv4WARPContinueInput} == [Nn] ]]; then
-            red " 已退出本机 IPv4 WARP Sock5 代理测试"
+            red " Exited native IPv4 WARP Sock5 proxy test"
             echo
             return
         else
 
-            bold " 开始测试本机的IPv4 通过CloudFlare WARP 解锁 Disney+ 情况"
+            bold " Start testing the local IPv4 to unlock Disney+ situation through CloudFlare WARP"
             curlCommand="${curlCommand} -x socks5h://127.0.0.1:${warpPortInput}"
             curlInfo="IPv4 CloudFlare WARP"
         fi
@@ -468,33 +468,33 @@ function testDisneyPlusAll(){
         if [[ "${isIPV6Enabled}" == "false" ]]; then
 
             if [[ ${isIpv6ContinueInput} == [Nn] ]]; then
-                red " 已退出 本机IPv6 测试 "
+                red " Exited native IPv6 test "
                 echo
                 return
             else
-                bold " 开始测试本机的IPv6 解锁 Disney+ 情况"
+                bold " Start testing the local IPv6 unlocking Disney+ situation"
                 curlCommand="${curlCommand} -6"
                 curlInfo="IPv6"
             fi
         else
-                bold " 开始测试本机的IPv6 解锁 Disney+ 情况"
+                bold " Start testing the local IPv6 unlocking Disney+ situation"
                 curlCommand="${curlCommand} -6"
                 curlInfo="IPv6"
 
         fi
 
     elif [[ $1 == "ipv6warp" ]]; then
-        bold " 开始测试本机的IPv6 通过CloudFlare WARP 解锁 Disney+ 情况"
+        bold " Start testing the local IPv6 to unlock Disney+ through CloudFlare WARP"
         curlCommand="${curlCommand} -6"
         curlInfo="IPv6 CloudFlare WARP"
 
     else
-        red " 没有选择要进行的测试 已退出! "
+        red " No tests selected to run Exited! "
         return
 
     fi
 
-    # curl 参数说明
+    # curl Parameter Description
     # --connect-timeout <seconds> Maximum time allowed for connection
     # -4, --ipv4          Resolve names to IPv4 addresses
     # -s, --silent        Silent mode
@@ -518,7 +518,7 @@ function testDisneyPlusOneMethod(){
         resultDisneyPlusIndex=$($1 --max-time 10 -S -X POST "${disneyLinkPrepare}" -H "authorization: Bearer ZGlzbmV5JmJyb3dzZXImMS4wLjA.Cu56AgSfBTDag5NiRA81oLHkDZfu5L3CKadnefEAY84" -H "content-type: application/json; charset=UTF-8" -d '{"deviceFamily":"browser","applicationRuntime":"chrome","deviceProfile":"windows","attributes":{}}' 2>&1)
   
         if [[ "${resultDisneyPlusIndex}" == "curl"* ]];then
-            red " 网络错误 无法打开 Disney+ 网站"
+            red " Network error Unable to open Disney+ website"
             return
         fi
 
@@ -528,13 +528,13 @@ function testDisneyPlusOneMethod(){
         resultYoutube=$($1 ${disneyLinkRed} | grep 'The Dark World' )
 
         if [  -z "${resultYoutube}" ]; then
-            yellow " 无法打开 Disney Plus 影片"
+            yellow " Can't open Disney Plus movie"
         else
-            green " 本机 $2 支持观看 Disney Plus 影片"
+            green " native $2 Support for watching Disney Plus movies"
         fi
 
     else
-        red " 要进行的测试 Url为空! "
+        red " The test to be run Url is empty! "
     fi
 
 }
