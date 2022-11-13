@@ -69,7 +69,7 @@ function showInfoGreen(){
 
 
 function promptContinueOpeartion(){
-	read -p "是否继续操作? 直接回车默认继续操作, 请输入[Y/n]:" isContinueInput
+	read -p "Do you want to continue the operation? Press Enter to continue the operation by default, please enter[Y/n]:" isContinueInput
 	isContinueInput=${isContinueInput:-Y}
 
 	if [[ $isContinueInput == [Yy] ]]; then
@@ -122,10 +122,10 @@ function checkCPU(){
         echo
     fi
 
-	# green " Status 状态显示--当前CPU是: $osCPU"
+	# green " Status Status display -- the current CPU is: $osCPU"
 }
 
-# 检测系统版本号
+# Check the system version number
 getLinuxOSVersion(){
     if [[ -s /etc/redhat-release ]]; then
         osReleaseVersion=$(grep -oE '[0-9.]+' /etc/redhat-release)
@@ -170,7 +170,7 @@ getLinuxOSVersion(){
     osReleaseVersionNoShort=$(echo $osReleaseVersionNo | sed 's/\..*//')
 }
 
-# 检测系统发行版代号
+# Detection system release code
 function getLinuxOSRelease(){
     if [[ -f /etc/redhat-release ]]; then
         osRelease="centos"
@@ -224,7 +224,7 @@ function getLinuxOSRelease(){
 
 
 function promptContinueOpeartion(){
-	read -r -p "是否继续操作? 直接回车默认继续操作, 请输入[Y/n]:" isContinueInput
+	read -r -p "Do you want to continue the operation? Press Enter to continue the operation by default, please enter[Y/n]:" isContinueInput
 	isContinueInput=${isContinueInput:-Y}
 
 	if [[ $isContinueInput == [Yy] ]]; then
@@ -248,7 +248,7 @@ function testLinuxPortUsage(){
     if [ -n "$osPort80" ]; then
         process80=$(netstat -tlpn | awk -F '[: ]+' '$5=="80"{print $9}')
         red "==========================================================="
-        red "检测到80端口被占用，占用进程为：${process80} "
+        red "It is detected that port 80 is occupied, and the occupied process is：${process80} "
         red "==========================================================="
         promptContinueOpeartion
     fi
@@ -256,7 +256,7 @@ function testLinuxPortUsage(){
     if [ -n "$osPort443" ]; then
         process443=$(netstat -tlpn | awk -F '[: ]+' '$5=="443"{print $9}')
         red "============================================================="
-        red "检测到443端口被占用，占用进程为：${process443} "
+        red "It is detected that port 443 is occupied, and the occupied process is：${process443} "
         red "============================================================="
         promptContinueOpeartion
     fi
@@ -264,15 +264,15 @@ function testLinuxPortUsage(){
     osSELINUXCheck=$(grep SELINUX= /etc/selinux/config | grep -v "#")
     if [ "$osSELINUXCheck" == "SELINUX=enforcing" ]; then
         red "======================================================================="
-        red "检测到SELinux为开启强制模式状态, 为防止申请证书失败 将关闭SELinux. 请先重启VPS后，再执行本脚本"
+        red "It is detected that SELinux is in mandatory mode, and SELinux will be turned off to prevent failure to apply for a certificate. Please restart the VPS before executing this script"
         red "======================================================================="
-        read -p "是否现在重启? 请输入 [Y/n] :" osSELINUXCheckIsRebootInput
+        read -p "Reboot now? Please enter [Y/n] :" osSELINUXCheckIsRebootInput
         [ -z "${osSELINUXCheckIsRebootInput}" ] && osSELINUXCheckIsRebootInput="y"
 
         if [[ $osSELINUXCheckIsRebootInput == [Yy] ]]; then
             sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
             setenforce 0
-            echo -e "VPS 重启中..."
+            echo -e "VPS Rebooting..."
             reboot
         fi
         exit
@@ -280,15 +280,15 @@ function testLinuxPortUsage(){
 
     if [ "$osSELINUXCheck" == "SELINUX=permissive" ]; then
         red "======================================================================="
-        red "检测到SELinux为宽容模式状态, 为防止申请证书失败, 将关闭SELinux. 请先重启VPS后，再执行本脚本"
+        red "It is detected that SELinux is in permissive mode. In order to prevent the failure to apply for a certificate, SELinux will be turned off. Please restart the VPS before executing this script"
         red "======================================================================="
-        read -p "是否现在重启? 请输入 [Y/n] :" osSELINUXCheckIsRebootInput
+        read -p "Reboot now? Please enter[Y/n] :" osSELINUXCheckIsRebootInput
         [ -z "${osSELINUXCheckIsRebootInput}" ] && osSELINUXCheckIsRebootInput="y"
 
         if [[ $osSELINUXCheckIsRebootInput == [Yy] ]]; then
             sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
             setenforce 0
-            echo -e "VPS 重启中..."
+            echo -e "VPS Rebooting..."
             reboot
         fi
         exit
@@ -297,7 +297,7 @@ function testLinuxPortUsage(){
     if [ "$osRelease" == "centos" ]; then
         if  [[ ${osReleaseVersionNoShort} == "6" || ${osReleaseVersionNoShort} == "5" ]]; then
             green " =================================================="
-            red " 本脚本不支持 Centos 6 或 Centos 6 更早的版本"
+            red " This script does not support Centos 6 or earlier versions of Centos 6"
             green " =================================================="
             exit
         fi
@@ -309,12 +309,12 @@ function testLinuxPortUsage(){
     elif [ "$osRelease" == "ubuntu" ]; then
         if  [[ ${osReleaseVersionNoShort} == "14" || ${osReleaseVersionNoShort} == "12" ]]; then
             green " =================================================="
-            red " 本脚本不支持 Ubuntu 14 或 Ubuntu 14 更早的版本"
+            red " This script does not support Ubuntu 14 or earlier versions of Ubuntu 14"
             green " =================================================="
             exit
         fi
 
-        red " 关闭防火墙 ufw"
+        red " turn off firewall ufw"
         ${sudoCmd} systemctl stop ufw
         ${sudoCmd} systemctl disable ufw
         ufw disable
@@ -333,7 +333,7 @@ function testLinuxPortUsage(){
 
 
 
-# 编辑 SSH 公钥 文件用于 免密码登录
+# Edit SSH public key file for passwordless login
 function editLinuxLoginWithPublicKey(){
     if [ ! -d "${HOME}/ssh" ]; then
         mkdir -p ${HOME}/.ssh
@@ -343,10 +343,10 @@ function editLinuxLoginWithPublicKey(){
 }
 
 
-# 修改SSH 端口号
+# Modify the SSH port number
 function changeLinuxSSHPort(){
-    green " 修改的SSH登陆的端口号, 不要使用常用的端口号. 例如 20|21|23|25|53|69|80|110|443|123!"
-    read -p "请输入要修改的端口号(必须是纯数字并且在1024~65535之间或22):" osSSHLoginPortInput
+    green " Modify the port number for SSH login, do not use the commonly used port number. For example: 20|21|23|25|53|69|80|110|443|123!"
+    read -p "Please enter the port number to be modified (must be a pure number and between 1024~65535 or 22):" osSSHLoginPortInput
     osSSHLoginPortInput=${osSSHLoginPortInput:-0}
 
     if [ $osSSHLoginPortInput -eq 22 -o $osSSHLoginPortInput -gt 1024 -a $osSSHLoginPortInput -lt 65535 ]; then
@@ -380,10 +380,10 @@ function changeLinuxSSHPort(){
             ${sudoCmd} systemctl restart ssh
         fi
 
-        green "设置成功, 请记住设置的端口号 ${osSSHLoginPortInput}!"
-        green "登陆服务器命令: ssh -p ${osSSHLoginPortInput} root@111.111.111.your ip !"
+        green "The setting is successful, please remember the set port number ${osSSHLoginPortInput}!"
+        green "login server command: ssh -p ${osSSHLoginPortInput} root@111.111.111.your ip !"
     else
-        echo "输入的端口号错误! 范围: 22,1025~65534"
+        echo "Wrong port number entered! Range: 22,1025~65534"
     fi
 }
 
@@ -395,24 +395,24 @@ function setLinuxDateZone(){
     tempCurrentDateZone=$(date +'%z')
 
     echo
-    if [[ ${tempCurrentDateZone} == "+0800" ]]; then
-        yellow "当前时区已经为北京时间  $tempCurrentDateZone | $(date -R) "
+    if [[ ${tempCurrentDateZone} == "+0330" ]]; then
+        yellow "The current time zone is already Tehran time  $tempCurrentDateZone | $(date -R) "
     else 
         green " =================================================="
-        yellow " 当前时区为: $tempCurrentDateZone | $(date -R) "
-        yellow " 是否设置时区为北京时间 +0800区, 以便cron定时重启脚本按照北京时间运行."
+        yellow " The current time zone is: $tempCurrentDateZone | $(date -R) "
+        yellow " Whether to set the time zone to Tehran time +0330zone, so that the cron restart script runs according to Tehran time."
         green " =================================================="
         # read 默认值 https://stackoverflow.com/questions/2642585/read-a-variable-in-bash-with-a-default-value
 
-        read -p "是否设置为北京时间 +0800 时区? 请输入[Y/n]:" osTimezoneInput
+        read -p "Is it set to Tehran time +0330 time zone? Please enter[Y/n]:" osTimezoneInput
         osTimezoneInput=${osTimezoneInput:-Y}
 
         if [[ $osTimezoneInput == [Yy] ]]; then
-            if [[ -f /etc/localtime ]] && [[ -f /usr/share/zoneinfo/Asia/Shanghai ]];  then
+            if [[ -f /etc/localtime ]] && [[ -f /usr/share/zoneinfo/Asia/Tehran ]];  then
                 mv /etc/localtime /etc/localtime.bak
-                cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+                cp /usr/share/zoneinfo/Asia/Tehran /etc/localtime
 
-                yellow " 设置成功! 当前时区已设置为 $(date -R)"
+                yellow " Set successfully! The current time zone has been set to $(date -R)"
                 green " =================================================="
             fi
         fi
@@ -460,8 +460,8 @@ function setLinuxDateZone(){
 
 function DSMEditHosts(){
 	green " ================================================== "
-	green " 准备打开VI 编辑/etc/hosts"
-	green " 请用root 用户登录系统的SSH 运行本命令"
+	green " Prepare to open the VI to edit /etc/hosts"
+	green " Please use the root user to log in to the system's SSH to run this command"
 	green " ================================================== "
 
     # nameserver 223.5.5.5
@@ -488,7 +488,7 @@ function DSMEditHosts(){
 
 
 
-# 软件安装
+# Software Installation
 function installSoftDownload(){
 	if [[ "${osRelease}" == "debian" || "${osRelease}" == "ubuntu" ]]; then
 		if ! dpkg -l | grep -qw wget; then
@@ -537,7 +537,7 @@ function installSoftDownload(){
 function installPackage(){
     echo
     green " =================================================="
-    yellow " 开始安装软件"
+    yellow " Start installing the software"
     green " =================================================="
     echo
 
@@ -648,7 +648,7 @@ EOF
 
 
 function installSoftEditor(){
-    # 安装 micro 编辑器
+    # Install the micro editor
     if [[ ! -f "${HOME}/bin/micro" ]] ;  then
         mkdir -p ${HOME}/bin
         cd ${HOME}/bin
@@ -657,7 +657,7 @@ function installSoftEditor(){
         cp ${HOME}/bin/micro /usr/local/bin
 
         green " =================================================="
-        green " micro 编辑器 安装成功!"
+        green " Micro editor installed successfully!"
         green " =================================================="
     fi
 
@@ -667,23 +667,23 @@ function installSoftEditor(){
         $osSystemPackage install -y vim-gui-common vim-runtime vim nano
     fi
 
-    # 设置vim 中文乱码
-    if [[ ! -d "${HOME}/.vimrc" ]] ;  then
-        cat > "${HOME}/.vimrc" <<-EOF
-set fileencodings=utf-8,gb2312,gb18030,gbk,ucs-bom,cp936,latin1
-set enc=utf8
-set fencs=utf8,gbk,gb2312,gb18030
+    # Set vim Chinese garbled
+    # if [[ ! -d "${HOME}/.vimrc" ]] ;  then
+    #    cat > "${HOME}/.vimrc" <<-EOF
+#set fileencodings=utf-8,gb2312,gb18030,gbk,ucs-bom,cp936,latin1
+#set enc=utf8
+#set fencs=utf8,gbk,gb2312,gb18030
 
-syntax on
-colorscheme elflord
+#syntax on
+#colorscheme elflord
 
-if has('mouse')
-  se mouse+=a
-  set number
-endif
+#if has('mouse')
+#  se mouse+=a
+#  set number
+#endif
 
-EOF
-    fi
+#EOF
+#    fi
 }
 
 
@@ -696,7 +696,7 @@ EOF
 
 
 
-# 更新本脚本
+# Updated script
 function upgradeScript(){
     wget -Nq --no-check-certificate -O ./linux_install_software.sh "https://raw.githubusercontent.com/jinwyp/one_click_script/master/linux_install_software.sh"
     green " 本脚本升级成功! "
@@ -796,19 +796,19 @@ configDownloadTempPath="${HOME}/temp"
 function downloadAndUnzip(){
     if [ -z $1 ]; then
         green " ================================================== "
-        green "     下载文件地址为空!"
+        green "     The download file address is empty!"
         green " ================================================== "
         exit
     fi
     if [ -z $2 ]; then
         green " ================================================== "
-        green "     目标路径地址为空!"
+        green "     destination path address is empty!"
         green " ================================================== "
         exit
     fi
     if [ -z $3 ]; then
         green " ================================================== "
-        green "     下载文件的文件名为空!"
+        green "     The filename of the downloaded file is empty!"
         green " ================================================== "
         exit
     fi
@@ -816,21 +816,21 @@ function downloadAndUnzip(){
     mkdir -p ${configDownloadTempPath}
 
     if [[ $3 == *"tar.xz"* ]]; then
-        green "===== 下载并解压tar.xz文件: $3 "
+        green "===== Download and extract the tar.xz file: $3 "
         wget -O ${configDownloadTempPath}/$3 $1
         tar xf ${configDownloadTempPath}/$3 -C ${configDownloadTempPath}
         mv ${configDownloadTempPath}/* $2
         rm -rf ${configDownloadTempPath}
 
     elif [[ $3 == *"tar.gz"* ]]; then
-        green "===== 下载并解压tar.gz文件: $3 "
+        green "===== Download and extract the tar.gz file: $3 "
         wget -O ${configDownloadTempPath}/$3 $1
         tar zxvf ${configDownloadTempPath}/$3 -C ${configDownloadTempPath}
         mv ${configDownloadTempPath}/* $2
         rm -rf ${configDownloadTempPath}
 
     else
-        green "===== 下载并解压zip文件:  $3 "
+        green "===== Download and extract the zip file:  $3 "
         wget -O ${configDownloadTempPath}/$3 $1
         unzip -d $2 ${configDownloadTempPath}/$3
         rm -rf ${configDownloadTempPath}
@@ -891,16 +891,16 @@ function installNodejs(){
     fi
 
     echo
-    green " Nodejs 版本:"
+    green " Nodejs Version:"
     node --version 
     echo
-    green " NPM 版本:"
+    green " NPM Version:"
     npm --version  
 
-    showHeaderGreen "准备安装 PM2 进程守护程序"
+    showHeaderGreen "ready to install PM2 process daemon"
     npm install -g pm2 
 
-    showHeaderGreen "Nodejs 与 PM2 安装成功 !"
+    showHeaderGreen "Nodejs and PM2 Successful installation !"
 }
 
 
@@ -911,14 +911,14 @@ configDockerComposePath="/usr/local/lib/docker/cli-plugins"
 
 function installDocker(){
 
-    showHeaderGreen "准备安装 Docker 与 Docker Compose"
+    showHeaderGreen "ready to install Docker and Docker Compose"
 
     mkdir -p ${configDockerDownloadPath}
     cd ${configDockerDownloadPath}
 
 
     if [[ -s "/usr/bin/docker" ]]; then
-        showHeaderRed "已安装过 Docker. Docker already installed!"
+        showHeaderRed "installed Docker. Docker already installed!"
     else
 
         if [[ "${osInfo}" == "AlmaLinux" ]]; then
@@ -946,7 +946,7 @@ function installDocker(){
 
 
     if [[ -s "/usr/local/bin/docker-compose" ]]; then
-        showHeaderRed "已安装过 Docker Compose. Docker Compose already installed!"
+        showHeaderRed "installed Docker Compose. Docker Compose already installed!"
     else
 
         versionDockerCompose=$(getGithubLatestReleaseVersion "docker/compose")
@@ -976,7 +976,7 @@ function installDocker(){
         echo
     fi
 
-    showHeaderGreen "Docker 与 Docker Compose 安装成功 !"
+    showHeaderGreen "Docker and Docker Compose Successful installation !"
     # systemctl status docker.service
 }
 
@@ -998,7 +998,7 @@ function removeDocker(){
     rm -f "/usr/local/bin/docker-compose"
     rm -f "${DOCKER_CONFIG}/cli-plugins/docker-compose"
 
-    showHeaderGreen "Docker 已经卸载完毕 !"
+    showHeaderGreen "Docker has been uninstalled !"
 }
 
 
@@ -1042,7 +1042,7 @@ function installPortainer(){
     echo
     docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
 
-    showHeaderGreen " Portainer 安装成功. Running at port 8000 !"
+    showHeaderGreen " Portainer Successful installation. Running at port 8000 !"
 }
 
 
@@ -1101,30 +1101,30 @@ function getHTTPSCertificateCheckEmail(){
     if [ -z $2 ]; then
         
         if [[ $1 == "email" ]]; then
-            red " 输入邮箱地址不能为空, 请重新输入!"
+            red " The input email address cannot be empty, please re-enter!"
             getHTTPSCertificateInputEmail
         elif [[ $1 == "googleEabKey" ]]; then
-            red " 输入EAB key 不能为空, 请重新输入!"
+            red " Enter EAB key can not be empty, please re-enter!"
             getHTTPSCertificateInputGoogleEABKey
         elif [[ $1 == "googleEabId" ]]; then
-            red " 输入EAB Id 不能为空, 请重新输入!"
+            red " Enter EAB Id cannot be empty, please re-enter!"
             getHTTPSCertificateInputGoogleEABId            
         fi
     fi
 }
 function getHTTPSCertificateInputEmail(){
     echo
-    read -r -p "请输入邮箱地址, 用于申请证书:" acmeSSLRegisterEmailInput
+    read -r -p "Please enter your email address to apply for a certificate:" acmeSSLRegisterEmailInput
     getHTTPSCertificateCheckEmail "email" "${acmeSSLRegisterEmailInput}"
 }
 function getHTTPSCertificateInputGoogleEABKey(){
     echo
-    read -r -p "请输入 Google EAB key :" isDomainSSLGoogleEABKeyInput
+    read -r -p "Please enter Google EAB key :" isDomainSSLGoogleEABKeyInput
     getHTTPSCertificateCheckEmail "googleEabKey" "${isDomainSSLGoogleEABKeyInput}"
 }
 function getHTTPSCertificateInputGoogleEABId(){
     echo
-    read -r -p "请输入 Google EAB id :" isDomainSSLGoogleEABIdInput
+    read -r -p "Please enter Google EAB id :" isDomainSSLGoogleEABIdInput
     getHTTPSCertificateCheckEmail "googleEabId" "${isDomainSSLGoogleEABIdInput}"
 }
 
@@ -1148,21 +1148,21 @@ configSSLCertFullchainFilename="server.crt"
 
 function getHTTPSCertificateWithAcme(){
 
-    # 申请https证书
+    # Applicationhttps证书
 	mkdir -p ${configSSLCertPath}
 	mkdir -p ${configWebsitePath}
 	curl https://get.acme.sh | sh
 
     echo
     green " ================================================== "
-    green " 请选择证书提供商, 默认通过 Letsencrypt.org 来申请证书 "
-    green " 如果证书申请失败, 例如一天内通过 Letsencrypt.org 申请次数过多, 可选 BuyPass.com 或 ZeroSSL.com 来申请."
+    green " Please select a certificate provider, the default is to apply for a certificate through Letsencrypt.org "
+    green " If the certificate application fails, such as too many applications through Letsencrypt.org in one day, you can choose BuyPass.com or ZeroSSL.com to apply."
     green " 1 Letsencrypt.org "
     green " 2 BuyPass.com "
     green " 3 ZeroSSL.com "
     green " 4 Google Public CA "
     echo
-    read -r -p "请选择证书提供商? 默认直接回车为通过 Letsencrypt.org 申请, 请输入纯数字:" isDomainSSLFromLetInput
+    read -r -p "Please select a certificate provider? The default is to apply through Letsencrypt.org, please enter pure numbers:" isDomainSSLFromLetInput
     isDomainSSLFromLetInput=${isDomainSSLFromLetInput:-1}
     
     if [[ "$isDomainSSLFromLetInput" == "2" ]]; then
@@ -1180,8 +1180,8 @@ function getHTTPSCertificateWithAcme(){
 
     elif [[ "$isDomainSSLFromLetInput" == "4" ]]; then
         green " ================================================== "
-        yellow " 请先按照如下链接申请 google Public CA  https://hostloc.com/thread-993780-1-1.html"
-        yellow " 具体可参考 https://github.com/acmesh-official/acme.sh/wiki/Google-Public-CA"
+        yellow " Please follow the link below to apply google Public CA  https://hostloc.com/thread-993780-1-1.html"
+        yellow " For details, please refer to https://github.com/acmesh-official/acme.sh/wiki/Google-Public-CA"
         getHTTPSCertificateInputEmail
         acmeSSLServerName="google"
         getHTTPSCertificateInputGoogleEABKey
@@ -1195,10 +1195,10 @@ function getHTTPSCertificateWithAcme(){
 
     echo
     green " ================================================== "
-    green " 请选择 acme.sh 脚本申请SSL证书方式: 1 http方式, 2 dns方式 "
-    green " 默认直接回车为 http 申请方式, 选否则为 dns 方式"
+    green " Please select the acme.sh script to apply for the SSL certificate method: 1 http method, 2 dns method "
+    green " The default is to press Enter directly to apply for http, otherwise it is to use dns"
     echo
-    read -r -p "请选择SSL证书申请方式 ? 默认直接回车为http方式, 选否则为 dns 方式申请证书, 请输入[Y/n]:" isAcmeSSLRequestMethodInput
+    read -r -p "Please select an SSL certificate application method[Y/n]:" isAcmeSSLRequestMethodInput
     isAcmeSSLRequestMethodInput=${isAcmeSSLRequestMethodInput:-Y}
     echo
 
@@ -1207,23 +1207,23 @@ function getHTTPSCertificateWithAcme(){
 
         if [[ "${isInstallNginx}" == "true" ]]; then
             acmeDefaultValue="3"
-            acmeDefaultText="3. webroot 并使用ran作为临时的Web服务器"
+            acmeDefaultText="3. webroot and use ran as a temporary web server"
             acmeSSLHttpWebrootMode="webrootran"
         else
             acmeDefaultValue="1"
-            acmeDefaultText="1. standalone 模式"
+            acmeDefaultText="1. standalone model"
             acmeSSLHttpWebrootMode="standalone"
         fi
 
         if [ -z "$1" ]; then
             green " ================================================== "
-            green " 请选择 http 申请证书方式: 默认直接回车为 ${acmeDefaultText} "
-            green " 1 standalone 模式, 适合没有安装Web服务器, 如已选择不安装Nginx 请选择此模式. 请确保80端口不被占用. 注意:三个月后续签时80端口被占用会导致续签失败!"
-            green " 2 webroot 模式, 适合已经安装Web服务器, 例如 Caddy Apache 或 Nginx, 请确保Web服务器已经运行在80端口"
-            green " 3 webroot 模式 并使用 ran 作为临时的Web服务器, 如已选择同时安装Nginx，请使用此模式, 可以正常续签"
-            green " 4 nginx 模式 适合已经安装 Nginx, 请确保 Nginx 已经运行"
+            green " please choose http How to apply for a certificate: The default is to enter directly ${acmeDefaultText} "
+            green " 1 standalone model, Suitable for no web server installed, If you have chosen not to install Nginx please choose this model. Please make sure that port 80 is not occupied. Note: If port 80 is occupied after three months, the renewal will fail!"
+            green " 2 webroot model, Suitable for already installed web server, E.g Caddy Apache or Nginx, Make sure the web server is running on port 80"
+            green " 3 webroot model and use ran as a temporary web server, If you have chosen to install Nginx at the same time，please use this model, Can be renewed normally"
+            green " 4 nginx model Fits already installed Nginx, please ensure Nginx already running"
             echo
-            read -r -p "请选择http申请证书方式? 默认为 ${acmeDefaultText}, 请输入纯数字:" isAcmeSSLWebrootModeInput
+            read -r -p "please choose httpHow to apply for a certificate? The default is ${acmeDefaultText}, Please enter pure numbers:" isAcmeSSLWebrootModeInput
        
             isAcmeSSLWebrootModeInput=${isAcmeSSLWebrootModeInput:-${acmeDefaultValue}}
             
@@ -1250,21 +1250,21 @@ function getHTTPSCertificateWithAcme(){
 
         echo
         if [[ ${acmeSSLHttpWebrootMode} == "standalone" ]] ; then
-            green " 开始申请证书 acme.sh 通过 http standalone mode 从 ${acmeSSLServerName} 申请, 请确保80端口不被占用 "
+            green " Start applying for a certificate acme.sh pass http standalone mode from ${acmeSSLServerName} Application, please ensure port 80 is not occupied "
             
             echo
             ${configSSLAcmeScriptPath}/acme.sh --issue -d ${configSSLDomain} --standalone --keylength ec-256 --days ${acmeSSLDays} --server ${acmeSSLServerName}
         
         elif [[ ${acmeSSLHttpWebrootMode} == "webroot" ]] ; then
-            green " 开始申请证书, acme.sh 通过 http webroot mode 从 ${acmeSSLServerName} 申请, 请确保web服务器 例如 nginx 已经运行在80端口 "
+            green " Start Application Certificate, acme.sh pass http webroot mode from ${acmeSSLServerName} Application, please ensure webserver E.g nginx already running on port 80  "
             
             echo
-            read -r -p "请输入Web服务器的html网站根目录路径? 例如/usr/share/nginx/html:" isDomainSSLNginxWebrootFolderInput
-            echo " 您输入的网站根目录路径为 ${isDomainSSLNginxWebrootFolderInput}"
+            read -r -p "Please enter the html website root directory path of the web server? E.g/usr/share/nginx/html:" isDomainSSLNginxWebrootFolderInput
+            echo " The website root directory path you entered is ${isDomainSSLNginxWebrootFolderInput}"
             
 
             if [ -z "${isDomainSSLNginxWebrootFolderInput}" ]; then
-                red " 输入的Web服务器的 html网站根目录路径不能为空, 网站根目录将默认设置为 ${configWebsitePath}, 请修改你的web服务器配置后再申请证书!"
+                red " Enter the web server's html website root directory path cannot be empty, The website root will be set by default to ${configWebsitePath}, Please modify your web server configuration and then apply the certificate!"
             else
                 configWebsitePath="${isDomainSSLNginxWebrootFolderInput}"
             fi
@@ -1273,7 +1273,7 @@ function getHTTPSCertificateWithAcme(){
             ${configSSLAcmeScriptPath}/acme.sh --issue -d ${configSSLDomain} --webroot ${configWebsitePath} --keylength ec-256 --days ${acmeSSLDays} --server ${acmeSSLServerName}
         
         elif [[ ${acmeSSLHttpWebrootMode} == "nginx" ]] ; then
-            green " 开始申请证书, acme.sh 通过 http nginx mode 从 ${acmeSSLServerName} 申请, 请确保web服务器 nginx 已经运行 "
+            green " Start Application Certificate, acme.sh pass http nginx mode from ${acmeSSLServerName} Application, please ensure webserver nginx already running "
             
             echo
             ${configSSLAcmeScriptPath}/acme.sh --issue -d ${configSSLDomain} --nginx --keylength ec-256 --days ${acmeSSLDays} --server ${acmeSSLServerName}
@@ -1294,9 +1294,9 @@ function getHTTPSCertificateWithAcme(){
             mkdir -p ${configRanPath}
             
             if [[ -f "${configRanPath}/${ranDownloadFileName}" ]]; then
-                green " 检测到 ran 已经下载过, 准备启动 ran 临时的web服务器 "
+                green " detected ran already downloaded, ready to start ran temporary web server "
             else
-                green " 开始下载 ran 作为临时的web服务器 "
+                green " start download ran as temporary web server "
                 downloadAndUnzip "${ranDownloadUrl}" "${configRanPath}" "${ranDownloadFileName}" 
                 chmod +x "${configRanPath}/${ranDownloadFileName}"
             fi
@@ -1305,7 +1305,7 @@ function getHTTPSCertificateWithAcme(){
             nohup ${configRanPath}/${ranDownloadFileName} -l=false -g=false -sa=true -p=80 -r=${configWebsitePath} >/dev/null 2>&1 &
             echo
             
-            green " 开始申请证书, acme.sh 通过 http webroot mode 从 ${acmeSSLServerName} 申请, 并使用 ran 作为临时的web服务器 "
+            green " Start Application Certificate, acme.sh pass http webroot mode from ${acmeSSLServerName} Application, and use ran as temporary web server "
             echo
             ${configSSLAcmeScriptPath}/acme.sh --issue -d ${configSSLDomain} --webroot ${configWebsitePath} --keylength ec-256 --days ${acmeSSLDays} --server ${acmeSSLServerName}
 
@@ -1314,13 +1314,13 @@ function getHTTPSCertificateWithAcme(){
         fi
 
     else
-        green " 开始申请证书, acme.sh 通过 dns mode 申请 "
+        green " Start Application Certificate, acme.sh pass dns mode Application "
 
         echo
-        green "请选择 DNS provider DNS 提供商: 1 CloudFlare, 2 AliYun,  3 DNSPod(Tencent), 4 GoDaddy "
-        red "注意 CloudFlare 针对某些免费域名例如 .tk .cf 等  不再支持使用API 申请DNS证书 "
+        green "please choose DNS provider DNS provider: 1 CloudFlare, 2 AliYun,  3 DNSPod(Tencent), 4 GoDaddy "
+        red "注意 CloudFlare For some free domains E.g .tk .cf etc. Use of API ApplicationDNS certificates is no longer supported "
         echo
-        read -r -p "请选择 DNS 提供商 ? 默认直接回车为 1. CloudFlare, 请输入纯数字:" isAcmeSSLDNSProviderInput
+        read -r -p "please choose DNS provider ? The default is to enter directly 1. CloudFlare, Please enter pure numbers:" isAcmeSSLDNSProviderInput
         isAcmeSSLDNSProviderInput=${isAcmeSSLDNSProviderInput:-1}    
 
         
@@ -1378,9 +1378,9 @@ function getHTTPSCertificateWithAcme(){
 function compareRealIpWithLocalIp(){
     echo
     echo
-    green " 是否检测域名指向的IP正确 直接回车默认检测"
-    red " 如果域名指向的IP不是本机IP, 或已开启CDN不方便关闭 或只有IPv6的VPS 可以选否不检测"
-    read -r -p "是否检测域名指向的IP正确? 请输入[Y/n]:" isDomainValidInput
+    green " Check whether the IP pointed to by the domain name is correct. Press Enter to check by default."
+    red " If the IP pointed to by the domain name is not the local IP, or the CDN is turned on, it is inconvenient to close, or the VPS only has IPv6, you can choose whether to not detect"
+    read -r -p "Check whether the IP pointed to by the domain name is correct? please enter[Y/n]:" isDomainValidInput
     isDomainValidInput=${isDomainValidInput:-Y}
 
     if [[ $isDomainValidInput == [Yy] ]]; then
@@ -1398,30 +1398,30 @@ function compareRealIpWithLocalIp(){
             #configNetworkLocalIPv62="$(curl https://v6.ident.me/)"
 
             green " ================================================== "
-            green " 域名解析地址为 ${configNetworkRealIp}, 本VPS的IP为 ${configNetworkLocalIp1} "
+            green " The domain name resolution address is ${configNetworkRealIp}, The IP of this VPS is ${configNetworkLocalIp1} "
 
             echo
             if [[ ${configNetworkRealIp} == "${configNetworkLocalIp1}" || ${configNetworkRealIp} == "${configNetworkLocalIp2}" ]] ; then
 
-                green " 域名解析的IP正常!"
+                green " The IP address of the domain name resolution is normal!"
                 green " ================================================== "
                 true
             else
-                red " 域名解析地址与本VPS的IP地址不一致!"
-                red " 本次安装失败，请确保域名解析正常, 请检查域名和DNS是否生效!"
+                red " The domain name resolution address and the IP address of this VPS are inconsistent!"
+                red " This installation failed，please ensure The domain name resolution is normal, please check whether the domain name and DNS are valid!"
                 green " ================================================== "
                 false
             fi
         else
             green " ================================================== "        
-            red "     域名输入错误!"
+            red "     Domain name entered incorrectly!"
             green " ================================================== "        
             false
         fi
         
     else
         green " ================================================== "
-        green "     不检测域名解析是否正确!"
+        green "     Do not check whether the domain name resolution is correct!"
         green " ================================================== "
         true
     fi
@@ -1441,19 +1441,19 @@ function getHTTPSCertificateStep1(){
 
     echo
     green " ================================================== "
-    yellow " 请输入绑定到本VPS的域名 例如www.xxx.com: (此步骤请关闭CDN后和nginx后安装 避免80端口占用导致申请证书失败)"
-    read -r -p "请输入解析到本VPS的域名:" configSSLDomain
+    yellow " please enter the domain name bound to this VPS E.gwww.xxx.com: (In this step, please close CDN and install after nginx to avoid application certificate failure due to port 80 occupation)"
+    read -r -p "please enter the domain name resolved to this VPS:" configSSLDomain
     
     if compareRealIpWithLocalIp "${configSSLDomain}" ; then
         echo
         green " =================================================="
-        green " 是否申请证书? 默认直接回车为申请证书, 如第二次安装或已有证书 可以选否"
-        green " 如果已经有SSL证书文件 请放到下面路径"
-        red " ${configSSLDomain} 域名证书内容文件路径 ${configSSLCertPath}/${configSSLCertFullchainFilename} "
-        red " ${configSSLDomain} 域名证书私钥文件路径 ${configSSLCertPath}/${configSSLCertKeyFilename} "
+        green " Whether Application certificate? The default is to enter directlyApplicationCertificate, such as the second installation or existing certificate, you can choose No"
+        green " If you already have an SSL certificate file, please put it in the following path"
+        red " ${configSSLDomain} Domain name certificate content file path ${configSSLCertPath}/${configSSLCertFullchainFilename} "
+        red " ${configSSLDomain} Domain name certificate private key file path ${configSSLCertPath}/${configSSLCertKeyFilename} "
         echo
 
-        read -r -p "是否申请证书? 默认直接回车为自动申请证书,请输入[Y/n]?" isDomainSSLRequestInput
+        read -r -p "Is it an Application certificate? The default is to enter directly Automatic Application Certificate,please enter[Y/n]?" isDomainSSLRequestInput
         isDomainSSLRequestInput=${isDomainSSLRequestInput:-Y}
 
         if [[ $isDomainSSLRequestInput == [Yy] ]]; then
@@ -1462,26 +1462,26 @@ function getHTTPSCertificateStep1(){
 
             if test -s "${configSSLCertPath}/${configSSLCertFullchainFilename}"; then
                 green " =================================================="
-                green "   域名SSL证书申请成功 !"
-                green " ${configSSLDomain} 域名证书内容文件路径 ${configSSLCertPath}/${configSSLCertFullchainFilename} "
-                green " ${configSSLDomain} 域名证书私钥文件路径 ${configSSLCertPath}/${configSSLCertKeyFilename} "
+                green "   Domain name SSL certificate Application success !"
+                green " ${configSSLDomain} Domain name certificate content file path ${configSSLCertPath}/${configSSLCertFullchainFilename} "
+                green " ${configSSLDomain} Domain name certificate private key file path ${configSSLCertPath}/${configSSLCertKeyFilename} "
                 green " =================================================="
 
             else
                 red "==================================="
-                red " https证书没有申请成功，安装失败!"
-                red " 请检查域名和DNS是否生效, 同一域名请不要一天内多次申请!"
-                red " 请检查80和443端口是否开启, VPS服务商可能需要添加额外防火墙规则，例如阿里云、谷歌云等!"
-                red " 重启VPS, 重新执行脚本, 可重新选择修复证书选项再次申请证书 ! "
+                red " Domain name certificate private key file path!"
+                red " Please check whether the domain name and DNS are valid. Please do not apply the same domain name multiple times in one day.!"
+                red " Please check whether ports 80 and 443 are open, VPS service providers may need to add additional firewall rules, E.g Alibaba Cloud, Google Cloud, etc.!"
+                red " Restart the VPS, re-execute the script, you can re-select the repair certificate option and apply the certificate again ! "
                 red "==================================="
                 exit
             fi
 
         else
             green " =================================================="
-            green "  不申请域名的证书, 请把证书放到如下目录, 或自行修改配置!"
-            green "  ${configSSLDomain} 域名证书内容文件路径 ${configSSLCertPath}/${configSSLCertFullchainFilename} "
-            green "  ${configSSLDomain} 域名证书私钥文件路径 ${configSSLCertPath}/${configSSLCertKeyFilename} "
+            green "  If you do not have the certificate of the Application domain name, please put the certificate in the following directory, or modify the configuration yourself! "
+            green "  ${configSSLDomain} Domain name certificate content file path ${configSSLCertPath}/${configSSLCertFullchainFilename} "
+            green "  ${configSSLDomain} Domain name certificate private key file path ${configSSLCertPath}/${configSSLCertKeyFilename} "
             green " =================================================="
         fi
     else
@@ -1581,13 +1581,13 @@ configAlistSystemdServicePath="/etc/systemd/system/alist.service"
 function installAlist(){
     echo
     green " =================================================="
-    green " 请选择 安装/更新/删除 Alist "
+    green " please choose 安装/更新/删除 Alist "
     green " 1. 安装 Alist "
     green " 2. 安装 Alist + Nginx (需要域名 并已解析到本机IP)"
     green " 3. 更新 Alist"  
     red " 4. 删除 Alist"     
     echo
-    read -r -p "请输入纯数字, 默认为安装:" languageInput
+    read -r -p "Please enter pure numbers, The default is安装:" languageInput
     
     createUserWWW
 
@@ -1606,9 +1606,9 @@ function installAlist(){
 
             green " ================================================== "
             echo
-            green "是否安装 Nginx web服务器, 安装Nginx可以提高安全性并提供更多功能"
-            green "如要安装 Nginx 需要提供域名, 并设置好域名DNS已解析到本机IP"
-            read -r -p "是否安装 Nginx web服务器? 直接回车默认安装, 请输入[Y/n]:" isNginxAlistInstallInput
+            green "Whether to install Nginx web server, install Nginx to improve security and provide more features"
+            green "If you want to install Nginx, you need to provide a domain name, and set the domain name DNS to resolve to the local IP"
+            read -r -p "Do you want to install Nginx web server? Enter directly to install by default, please enter[Y/n]:" isNginxAlistInstallInput
             isNginxAlistInstallInput=${isNginxAlistInstallInput:-Y}
 
             if [[ "${isNginxAlistInstallInput}" == [Yy] ]]; then
@@ -1631,7 +1631,7 @@ function installAlist(){
     esac
     echo
     green " =================================================="
-    green " Alist 安装路径为 /opt/alist "
+    green " Alist The installation path is /opt/alist "
     green " =================================================="
 
 }
@@ -1813,7 +1813,7 @@ EOF
     echo
     green "是否继续安装 Nginx web服务器, 安装Nginx可以提高安全性并提供更多功能"
     green "如要安装 Nginx 需要提供域名, 并设置好域名DNS已解析到本机IP"
-    read -p "是否安装 Nginx web服务器? 直接回车默认安装, 请输入[Y/n]:" isNginxInstallInput
+    read -p "是否安装 Nginx web服务器? 直接回车默认安装, please enter[Y/n]:" isNginxInstallInput
     isNginxInstallInput=${isNginxInstallInput:-Y}
 
     if [[ "${isNginxInstallInput}" == [Yy] ]]; then
@@ -1830,7 +1830,7 @@ EOF
 function removeCloudreve(){
 
     echo
-    read -p "是否确认卸载 Cloudreve? 直接回车默认卸载, 请输入[Y/n]:" isRemoveCloudreveInput
+    read -p "是否确认卸载 Cloudreve? 直接回车默认卸载, please enter[Y/n]:" isRemoveCloudreveInput
     isRemoveCloudreveInput=${isRemoveCloudreveInput:-Y}
 
     if [[ "${isRemoveCloudreveInput}" == [Yy] ]]; then
@@ -1974,7 +1974,7 @@ function installWebServerNginx(){
         configV2rayWebSocketPath=$(cat /dev/urandom | head -1 | md5sum | head -c 8)
         
         echo
-        read -r -p "是否自定义xray的 Websocket 的Path? 直接回车默认创建随机路径, 请输入自定义路径(不要输入/):" isV2rayUserWSPathInput
+        read -r -p "是否自定义xray的 Websocket 的Path? 直接回车默认创建随机路径, please enter自定义路径(不要输入/):" isV2rayUserWSPathInput
         isV2rayUserWSPathInput=${isV2rayUserWSPathInput:-${configV2rayWebSocketPath}}
         
         if [[ -z $isV2rayUserWSPathInput ]]; then
@@ -1986,7 +1986,7 @@ function installWebServerNginx(){
         configV2rayWebSocketPath="9b08c0d789"
 
         echo
-        read -r -p "输入xray的端口号? 直接回车默认为8799, 请输入自定义端口号[1-65535]:" configV2rayPort
+        read -r -p "输入xray的端口号? 直接回车The default is8799, please enter自定义端口号[1-65535]:" configV2rayPort
         configV2rayPort=${configV2rayPort:-8799}
 
         cat > "${nginxConfigSiteConfPath}/airuniverse.conf" <<-EOF
@@ -2411,7 +2411,7 @@ EOF
 
     echo
     green " ================================================== "
-    green " Web服务器 nginx 安装成功. 站点为 https://${configSSLDomain}"
+    green " Web服务器 nginx Successful installation. 站点为 https://${configSSLDomain}"
     echo
 	red " nginx 配置路径 ${nginxConfigPath} "
 	green " nginx 访问日志 ${nginxAccessLogFilePath},  错误日志 ${nginxErrorLogFilePath}  "
@@ -2450,7 +2450,7 @@ EOF
 function removeNginx(){
 
     echo
-    read -r -p "是否确认卸载Nginx? 直接回车默认卸载, 请输入[Y/n]:" isRemoveNginxServerInput
+    read -r -p "是否确认卸载Nginx? 直接回车默认卸载, please enter[Y/n]:" isRemoveNginxServerInput
     isRemoveNginxServerInput=${isRemoveNginxServerInput:-Y}
 
     if [[ "${isRemoveNginxServerInput}" == [Yy] ]]; then
@@ -2488,7 +2488,7 @@ function removeNginx(){
             rm -rf ${configDownloadTempPath}
 
             echo
-            read -r -p "是否删除证书 和 卸载acme.sh申请证书工具, 由于一天内申请证书有次数限制, 默认建议不删除证书,  请输入[y/N]:" isDomainSSLRemoveInput
+            read -r -p "是否删除证书 和 卸载acme.shApplication证书工具, 由于一天内Application证书有次数限制, 默认建议不删除证书,  please enter[y/N]:" isDomainSSLRemoveInput
             isDomainSSLRemoveInput=${isDomainSSLRemoveInput:-n}
 
             
@@ -2584,7 +2584,7 @@ function installEtherpad(){
 
 
 
-    read -r -p "请输入Admin的密码 (默认为admin):" configEtherpadPasswordInput
+    read -r -p "please enterAdmin的密码 (The default isadmin):" configEtherpadPasswordInput
     configEtherpadPasswordInput=${configEtherpadPasswordInput:-admin}
     echo
 
@@ -2593,7 +2593,7 @@ function installEtherpad(){
     green "是否安装 Nginx web服务器, 安装Nginx可以提高安全性并提供更多功能"
     green "如要安装 Nginx 需要提供域名, 并设置好域名DNS已解析到本机IP"
     echo
-    read -r -p "是否安装 Nginx web服务器? 直接回车默认安装, 请输入[Y/n]:" isNginxInstallInput
+    read -r -p "是否安装 Nginx web服务器? 直接回车默认安装, please enter[Y/n]:" isNginxInstallInput
     isNginxInstallInput=${isNginxInstallInput:-Y}
 
     echo
@@ -2622,7 +2622,7 @@ function installEtherpad(){
 
 function removeEtherpad(){
     echo
-    read -r -p "是否确认卸载Etherpad? 直接回车默认卸载, 请输入[Y/n]:" isRemoveEtherpadInput
+    read -r -p "是否确认卸载Etherpad? 直接回车默认卸载, please enter[Y/n]:" isRemoveEtherpadInput
     isRemoveEtherpadInput=${isRemoveEtherpadInput:-Y}
 
     if [[ "${isRemoveEtherpadInput}" == [Yy] ]]; then
@@ -2642,7 +2642,7 @@ function removeEtherpad(){
             rm -f "${nginxConfigSiteConfPath}/etherpad_site.conf"
             
             systemctl restart nginx.service
-            showHeaderGreen "已成功卸载 Etherpad Docker 版本 !"
+            showHeaderGreen "已成功卸载 Etherpad Docker Version !"
             
         else
             showHeaderRed "系统没有安装 Etherpad, 退出卸载"
@@ -2680,7 +2680,7 @@ function installNocoDB(){
     green "是否安装 Nginx web服务器, 安装Nginx可以提高安全性并提供更多功能"
     green "如要安装 Nginx 需要提供域名, 并设置好域名DNS已解析到本机IP"
     echo
-    read -r -p "是否安装 Nginx web服务器? 直接回车默认安装, 请输入[Y/n]:" isNginxInstallInput
+    read -r -p "是否安装 Nginx web服务器? 直接回车默认安装, please enter[Y/n]:" isNginxInstallInput
     isNginxInstallInput=${isNginxInstallInput:-Y}
 
     echo
@@ -2707,7 +2707,7 @@ function installNocoDB(){
 }
 function removeNocoDB(){
     echo
-    read -r -p "是否确认卸载NocoDB? 直接回车默认卸载, 请输入[Y/n]:" isRemoveNocoDBInput
+    read -r -p "是否确认卸载NocoDB? 直接回车默认卸载, please enter[Y/n]:" isRemoveNocoDBInput
     isRemoveNocoDBInput=${isRemoveNocoDBInput:-Y}
 
     if [[ "${isRemoveNocoDBInput}" == [Yy] ]]; then
@@ -2727,7 +2727,7 @@ function removeNocoDB(){
             rm -f "${nginxConfigSiteConfPath}/nocodb_site.conf"
             
             systemctl restart nginx.service
-            showHeaderGreen "已成功卸载 NocoDB Docker 版本 !"
+            showHeaderGreen "已成功卸载 NocoDB Docker Version !"
             
         else
             showHeaderRed "系统没有安装 NocoDB, 退出卸载"
@@ -2761,11 +2761,11 @@ function installGrist(){
     green " GRIST_SESSION_SECRET:  ${configGristSecretKey}"
     echo
 
-    read -r -p "请输入邮箱:" configGristEmailInput
+    read -r -p "please enter邮箱:" configGristEmailInput
     configGristEmailInput=${configGristEmailInput:-you@example.com}
     echo
 
-    read -r -p "请输入Team名称:" configGristTeamInput
+    read -r -p "please enterTeam名称:" configGristTeamInput
     configGristTeamInput=${configGristTeamInput:-singleteam}
     echo
 
@@ -2775,7 +2775,7 @@ function installGrist(){
     green "是否安装 Nginx web服务器, 安装Nginx可以提高安全性并提供更多功能"
     green "如要安装 Nginx 需要提供域名, 并设置好域名DNS已解析到本机IP"
     echo
-    read -r -p "是否安装 Nginx web服务器? 直接回车默认安装, 请输入[Y/n]:" isNginxInstallInput
+    read -r -p "是否安装 Nginx web服务器? 直接回车默认安装, please enter[Y/n]:" isNginxInstallInput
     isNginxInstallInput=${isNginxInstallInput:-Y}
 
     echo
@@ -2804,7 +2804,7 @@ function installGrist(){
 }
 function removeGrist(){
     echo
-    read -r -p "是否确认卸载Grist? 直接回车默认卸载, 请输入[Y/n]:" isRemoveGristInput
+    read -r -p "是否确认卸载Grist? 直接回车默认卸载, please enter[Y/n]:" isRemoveGristInput
     isRemoveGristInput=${isRemoveGristInput:-Y}
 
     if [[ "${isRemoveGristInput}" == [Yy] ]]; then
@@ -2825,7 +2825,7 @@ function removeGrist(){
             rm -f "${nginxConfigSiteConfPath}/grist_site.conf"
             
             systemctl restart nginx.service
-            showHeaderGreen "已成功卸载 Grist Docker 版本 !"
+            showHeaderGreen "已成功卸载 Grist Docker Version !"
         else
             showHeaderRed "系统没有安装 Grist, 退出卸载"
         fi
@@ -2872,17 +2872,17 @@ function removeGrist(){
 # Video Conference System 视频会议系统 安装
 function installJitsiMeet(){
 
-    showHeaderGreen "准备安装 视频会议系统 Jitsi Meet !" \
+    showHeaderGreen "ready to install 视频会议系统 Jitsi Meet !" \
     "Minimum Requirements: 4 GB RAM + 2 core CPU "
 
     echo
     green " =================================================="
-    green " 请选择安装方式: (默认为 1 Docker方式)"
+    green " please choose安装方式: (The default is 1 Docker方式)"
     echo
     green " 1. Install Jitsi Meet by Docker"
     green " 2. Install Jitsi Meet directly, only support Debian 10 / Ubuntu 20.04"   
     echo
-    read -r -p "请输入纯数字, 默认为1 Docker方式:" jitsimeetDockerInput
+    read -r -p "Please enter pure numbers, The default is1 Docker方式:" jitsimeetDockerInput
     
     case "${jitsimeetDockerInput}" in
         1 )
@@ -2933,9 +2933,9 @@ function installJitsiMeetByDocker(){
 
     green " =================================================="
     echo
-    read -r -p "请输入已解析到本机的域名: " configSSLDomain
+    read -r -p "please enter已解析到本机的域名: " configSSLDomain
     echo
-    read -r -p "请输入邮箱用于申请SSL域名证书: " configEmailForSSLDomain
+    read -r -p "please enter邮箱用于ApplicationSSL域名证书: " configEmailForSSLDomain
     echo
 
     sed -i "s|HTTP_PORT=8000|HTTP_PORT=80|g" "${configJitsiMeetDockerPath}/.env"
@@ -2980,9 +2980,9 @@ function addPasswordForJitsiMeetDocker(){
 
     green " =================================================="
     echo
-    green " 是否需要密码才能发起会议? 默认为否 任何人都能发起会议"
+    green " 是否需要密码才能发起会议? The default is否 任何人都能发起会议"
     echo
-    read -r -p "是否需要密码才能发起会议? 直接回车默认为否, 请输入[y/N]:" isJitsiMeetNeedPasswordInput
+    read -r -p "是否需要密码才能发起会议? 直接回车The default is否, please enter[y/N]:" isJitsiMeetNeedPasswordInput
     isJitsiMeetNeedPasswordInput=${isJitsiMeetNeedPasswordInput:-N}
 
     if [[ ${isJitsiMeetNeedPasswordInput} == [Yy] ]]; then
@@ -2995,10 +2995,10 @@ function addPasswordForJitsiMeetDocker(){
         docker-compose up -d
 
         echo
-        read -r -p "请输入发起会议用户名, 直接回车默认为jitsi : " isJitsiMeetUsernameInput
+        read -r -p "please enter发起会议用户名, 直接回车The default isjitsi : " isJitsiMeetUsernameInput
         isJitsiMeetUsernameInput=${isJitsiMeetUsernameInput:-jitsi}
         echo
-        read -r -p "请输入用户的密码, 直接回车默认为jitsi :" isJitsiMeetUserPasswordInput
+        read -r -p "please enter用户的密码, 直接回车The default isjitsi :" isJitsiMeetUserPasswordInput
         isJitsiMeetUserPasswordInput=${isJitsiMeetUserPasswordInput:-jitsi}
         echo
 
@@ -3111,7 +3111,7 @@ function installJitsiMeetOnUbuntu(){
 
     configLocalVPSIp="$(curl https://ipv4.icanhazip.com/)"
     echo
-    read -r -p "请输入本机IP: 直接回车默认为 ${configLocalVPSIp}" jitsimeetVPSIPInput
+    read -r -p "please enter本机IP: 直接回车The default is ${configLocalVPSIp}" jitsimeetVPSIPInput
     jitsimeetVPSIPInput=${jitsimeetVPSIPInput:-${configLocalVPSIp}}
 
     sed -i 's|#\?org.ice4j.ice.harvest.STUN_MAPPING_HARVESTER_ADDRESSES|#org.ice4j.ice.harvest.STUN_MAPPING_HARVESTER_ADDRESSES|g' ${configJitsiMeetVideoBridgeFilePath}
@@ -3152,7 +3152,7 @@ function secureAddPasswordForJitsiMeet(){
     
     green " =================================================="
     echo
-    read -r -p "请输入已解析到本机的域名: " configSSLDomain
+    read -r -p "please enter已解析到本机的域名: " configSSLDomain
     echo
 
     configJitsiMeetConfigFilePath="/etc/jitsi/meet/${configSSLDomain}-config.js"
@@ -3160,9 +3160,9 @@ function secureAddPasswordForJitsiMeet(){
     configJitsiMeetJicofoFilePath="/etc/jitsi/jicofo/jicofo.conf"
 
     echo
-    green " 是否需要密码才能发起会议? 默认为否 任何人都能发起会议"
+    green " 是否需要密码才能发起会议? The default is否 任何人都能发起会议"
     echo
-    read -r -p "是否需要密码才能发起会议? 直接回车默认为否, 请输入[y/N]:" isJitsiMeetNeedPasswordInput
+    read -r -p "是否需要密码才能发起会议? 直接回车The default is否, please enter[y/N]:" isJitsiMeetNeedPasswordInput
     isJitsiMeetNeedPasswordInput=${isJitsiMeetNeedPasswordInput:-N}
 
     if [[ ${isJitsiMeetNeedPasswordInput} == [Yy] ]]; then
@@ -3206,10 +3206,10 @@ EOM
 
 
         echo
-        read -r -p "请输入发起会议用户名, 直接回车默认为jitsi : " isJitsiMeetUsernameInput
+        read -r -p "please enter发起会议用户名, 直接回车The default isjitsi : " isJitsiMeetUsernameInput
         isJitsiMeetUsernameInput=${isJitsiMeetUsernameInput:-jitsi}
         echo
-        read -r -p "请输入用户的密码, 直接回车默认为jitsi :" isJitsiMeetUserPasswordInput
+        read -r -p "please enter用户的密码, 直接回车The default isjitsi :" isJitsiMeetUserPasswordInput
         isJitsiMeetUserPasswordInput=${isJitsiMeetUserPasswordInput:-jitsi}
         echo
 
@@ -3260,11 +3260,11 @@ function removeJitsiMeet(){
         rm -rf "${configJitsiMeetDockerPath}"
         rm -rf "${HOME}/.jitsi-meet-cfg"
 
-        showHeaderGreen "已成功卸载 Jitsi Meet Docker 版本 !"
+        showHeaderGreen "已成功卸载 Jitsi Meet Docker Version !"
     else
         showHeaderRed "没有发现 Jitsi Meet Docker !"
 
-        showHeaderGreen "准备卸载 视频会议系统 Jitsi Meet 非Docker 安装版本 !"
+        showHeaderGreen "准备卸载 视频会议系统 Jitsi Meet 非Docker 安装Version !"
 
         if [ "$osRelease" == "centos" ]; then
             showHeaderRed " 不支持 CentOS 系统"
@@ -3281,7 +3281,7 @@ function removeJitsiMeet(){
             rm -f /etc/letsencrypt/renewal/*
             rm -f /etc/letsencrypt/keys/*
 
-            showHeaderGreen "已成功卸载 Jitsi Meet 非Docker 安装版本 !"
+            showHeaderGreen "已成功卸载 Jitsi Meet 非Docker 安装Version !"
         fi
 
         removeNginx    
@@ -3452,7 +3452,7 @@ EOM
 
 function removeCMSGhost(){
     echo
-    read -r -p "是否确认卸载Ghost? 直接回车默认卸载, 请输入[Y/n]:" isRemoveGhostInput
+    read -r -p "是否确认卸载Ghost? 直接回车默认卸载, please enter[Y/n]:" isRemoveGhostInput
     isRemoveGhostInput=${isRemoveGhostInput:-Y}
 
     if [[ "${isRemoveGhostInput}" == [Yy] ]]; then
@@ -3538,20 +3538,20 @@ function replaceSogaConfig(){
     if test -s ${configSogaConfigFilePath}; then
 
         echo
-        green "请选择SSL证书申请方式: 1 Soga内置的http方式, 2 通过acme.sh申请并放置证书文件"
-        green "默认直接回车为 Soga内置的http自动申请模式"
-        green "选否 则通过acme.sh申请证书并放置证书文件, 支持http和dns模式申请证书, 推荐此模式"
+        green "please chooseSSL证书Application方式: 1 Soga内置的http方式, 2 passacme.shApplication并放置证书文件"
+        green "The default is to enter directly Soga内置的http自动Applicationmodel"
+        green "选否 则passacme.shApplication证书并放置证书文件, 支持http和dnsmodelApplication证书, 推荐此model"
         echo
-        green "注意: Soga SSL证书申请方式共有3种: 1 Soga内置的http方式, 2 Soga内置的dns方式, 3 手动放置证书文件 "
-        green "如需要使用 Soga内置的dns方式 申请SSL证书方式, 请手动修改 soga.conf 配置文件"
+        green "注意: Soga SSL证书Application方式共有3种: 1 Soga内置的http方式, 2 Soga内置的dns方式, 3 手动放置证书文件 "
+        green "如需要使用 Soga内置的dns方式 ApplicationSSL证书方式, 请手动修改 soga.conf 配置文件"
         echo
-        read -p "请选择SSL证书申请方式 ? 默认直接回车为http自动申请模式, 选否则通过acme.sh手动申请并放置证书, 请输入[Y/n]:" isSSLRequestHTTPInput
+        read -p "please chooseSSL证书Application方式 ? The default is to enter directlyhttp自动Applicationmodel, 选否则passacme.sh手动Application并放置证书, please enter[Y/n]:" isSSLRequestHTTPInput
         isSSLRequestHTTPInput=${isSSLRequestHTTPInput:-Y}
 
         if [[ $isSSLRequestHTTPInput == [Yy] ]]; then
             echo
             green " ================================================== "
-            yellow " 请输入绑定到本VPS的域名 例如www.xxx.com: (此步骤请关闭CDN后和nginx后安装 避免80端口占用导致申请证书失败)"
+            yellow " please enter绑定到本VPS的域名 E.gwww.xxx.com: (此步骤请关闭CDN后和nginx后安装 避免80端口占用导致Application证书失败)"
             green " ================================================== "
 
             read configSSLDomain
@@ -3569,13 +3569,13 @@ function replaceSogaConfig(){
 
         sed -i "s/cert_domain=/cert_domain=${configSSLDomain}/g" ${configSogaConfigFilePath}
 
-        read -p "请输入面板域名 例如www.123.com 不要带有http或https前缀 结尾不要带/ :" inputV2boardDomain
+        read -p "please enter面板域名 E.gwww.123.com 不要带有httporhttps前缀 结尾不要带/ :" inputV2boardDomain
         sed -i "s?webapi_url=?webapi_url=https://${inputV2boardDomain}/?g" ${configSogaConfigFilePath}
 
-        read -p "请输入webapi key 即通信密钥:" inputV2boardWebApiKey
+        read -p "please enterwebapi key 即通信密钥:" inputV2boardWebApiKey
         sed -i "s/webapi_key=/webapi_key=${inputV2boardWebApiKey}/g" ${configSogaConfigFilePath}
 
-        read -p "请输入节点ID (纯数字):" inputV2boardNodeId
+        read -p "please enter节点ID (纯数字):" inputV2boardNodeId
         sed -i "s/node_id=1/node_id=${inputV2boardNodeId}/g" ${configSogaConfigFilePath}
     
         soga restart 
@@ -3599,12 +3599,12 @@ function manageSoga(){
     echo "soga disable            - 取消 soga 开机自启"
     echo "soga log                - 查看 soga 日志"
     echo "soga update             - 更新 soga"
-    echo "soga update x.x.x       - 更新 soga 指定版本"
+    echo "soga update x.x.x       - 更新 soga 指定Version"
     echo "soga config             - 显示配置文件内容"
     echo "soga config xx=xx yy=yy - 自动设置配置文件"
     echo "soga install            - 安装 soga"
     echo "soga uninstall          - 卸载 soga"
-    echo "soga version            - 查看 soga 版本"
+    echo "soga version            - 查看 soga Version"
     echo "------------------------------------------"
 }
 
@@ -3659,21 +3659,21 @@ function replaceXrayRConfig(){
     if test -s ${configXrayRConfigFilePath}; then
 
         echo
-        green "请选择SSL证书申请方式: 1 XrayR内置的http 方式, 2 通过acme.sh 申请并放置证书文件, "
-        green "默认直接回车为 XrayR内置的http自动申请模式"
-        green "选否则通过acme.sh申请证书, 支持http 和 dns 等更多模式申请证书, 推荐使用"
+        green "please chooseSSL证书Application方式: 1 XrayR内置的http 方式, 2 passacme.sh Application并放置证书文件, "
+        green "The default is to enter directly XrayR内置的http自动Applicationmodel"
+        green "选否则passacme.shApplication证书, 支持http 和 dns 等更多modelApplication证书, 推荐使用"
         echo
-        green "注意: XrayR 的SSL证书申请方式 共有4种: 1 XrayR内置的http 方式, 2 XrayR内置的 dns 方式, 3 file 手动放置证书文件, 4 none 不申请证书"
-        green "如需要使用 XrayR内置的dns 申请SSL证书方式, 请手动修改 ${configXrayRConfigFilePath} 配置文件"
+        green "注意: XrayR 的SSL证书Application方式 共有4种: 1 XrayR内置的http 方式, 2 XrayR内置的 dns 方式, 3 file 手动放置证书文件, 4 none 不Application证书"
+        green "如需要使用 XrayR内置的dns ApplicationSSL证书方式, 请手动修改 ${configXrayRConfigFilePath} 配置文件"
     
-        read -p "请选择SSL证书申请方式 ? 默认直接回车为http自动申请模式, 选否则手动放置证书文件同时也会自动申请证书, 请输入[Y/n]:" isSSLRequestHTTPInput
+        read -p "please chooseSSL证书Application方式 ? The default is to enter directlyhttp自动Applicationmodel, 选否则手动放置证书文件同时也会自动Application证书, please enter[Y/n]:" isSSLRequestHTTPInput
         isSSLRequestHTTPInput=${isSSLRequestHTTPInput:-Y}
 
         configXrayRSSLRequestMode="http"
         if [[ $isSSLRequestHTTPInput == [Yy] ]]; then
             echo
             green " ================================================== "
-            yellow " 请输入绑定到本VPS的域名 例如www.xxx.com: (此步骤请关闭CDN后和nginx后安装 避免80端口占用导致申请证书失败)"
+            yellow " please enter绑定到本VPS的域名 E.gwww.xxx.com: (此步骤请关闭CDN后和nginx后安装 避免80端口占用导致Application证书失败)"
             green " ================================================== "
 
             read configSSLDomain
@@ -3693,7 +3693,7 @@ function replaceXrayRConfig(){
         sed -i "s/www.xxxx.net/${configSSLDomain}/g" ${configXrayRConfigFilePath}
 
         echo
-        read -p "请选择支持的面板类型 ? 默认直接回车为V2board, 选否则SSpanel, 请输入[Y/n]:" isXrayRPanelTypeInput
+        read -p "please choose支持的面板类型 ? The default is to enter directlyV2board, 选否则SSpanel, please enter[Y/n]:" isXrayRPanelTypeInput
         isXrayRPanelTypeInput=${isXrayRPanelTypeInput:-Y}
         configXrayRPanelType="SSpanel"
 
@@ -3704,20 +3704,20 @@ function replaceXrayRConfig(){
 
         
         echo
-        green "请输入面板域名, 例如www.123.com 不要带有http或https前缀 结尾不要带/"
-        green "请保证输入的V2board或其他面板域名支持Https 访问, 如要改成http请手动修改配置文件 ${configXrayRConfigFilePath}"
-        read -p "请输入面板域名 :" inputV2boardDomain
+        green "please enter面板域名, E.gwww.123.com 不要带有httporhttps前缀 结尾不要带/"
+        green "请保证输入的V2boardor其他面板域名支持Https 访问, 如要改成http请手动修改配置文件 ${configXrayRConfigFilePath}"
+        read -p "please enter面板域名 :" inputV2boardDomain
         sed -i "s?http://127.0.0.1:667?https://${inputV2boardDomain}?g" ${configXrayRConfigFilePath}
 
-        read -p "请输入ApiKey 即通信密钥:" inputV2boardWebApiKey
+        read -p "please enterApiKey 即通信密钥:" inputV2boardWebApiKey
         sed -i "s/123/${inputV2boardWebApiKey}/g" ${configXrayRConfigFilePath}
 
-        read -p "请输入节点ID (纯数字):" inputV2boardNodeId
+        read -p "please enter节点ID (纯数字):" inputV2boardNodeId
         sed -i "s/41/${inputV2boardNodeId}/g" ${configXrayRConfigFilePath}
     
 
         echo
-        read -p "请选择支持的节点类型 ? 默认直接回车为V2ray, 选否则为Trojan, 请输入[Y/n]:" isXrayRNodeTypeInput
+        read -p "please choose支持的节点类型 ? The default is to enter directlyV2ray, 选否则为Trojan, please enter[Y/n]:" isXrayRNodeTypeInput
         isXrayRNodeTypeInput=${isXrayRNodeTypeInput:-Y}
         configXrayRNodeType="V2ray"
 
@@ -3727,7 +3727,7 @@ function replaceXrayRConfig(){
 
         else
             echo
-            read -p "是否给V2ray启用Vless协议 ? 默认直接回车选择否,默认启用Vmess协议, 选择是则启用Vless协议, 请输入[y/N]:" isXrayRVlessSupportInput
+            read -p "是否给V2ray启用Vless协议 ? 默认直接回车选择否,默认启用Vmess协议, 选择是则启用Vless协议, please enter[y/N]:" isXrayRVlessSupportInput
             isXrayRVlessSupportInput=${isXrayRVlessSupportInput:-N}
 
             if [[ $isXrayRVlessSupportInput == [Yy] ]]; then
@@ -3735,7 +3735,7 @@ function replaceXrayRConfig(){
             fi
 
             echo
-            read -p "是否给V2ray启用XTLS ? 默认直接回车选择否,默认启用Tls, 选择是则启用XTLS, 请输入[y/N]:" isXrayRXTLSSupportInput
+            read -p "是否给V2ray启用XTLS ? 默认直接回车选择否,默认启用Tls, 选择是则启用XTLS, please enter[y/N]:" isXrayRXTLSSupportInput
             isXrayRXTLSSupportInput=${isXrayRXTLSSupportInput:-N}
 
             if [[ $isXrayRXTLSSupportInput == [Yy] ]]; then
@@ -3771,11 +3771,11 @@ function manageXrayR(){
     echo "XrayR disable            - 取消 XrayR 开机自启"
     echo "XrayR log                - 查看 XrayR 日志"
     echo "XrayR update             - 更新 XrayR"
-    echo "XrayR update x.x.x       - 更新 XrayR 指定版本"
+    echo "XrayR update x.x.x       - 更新 XrayR 指定Version"
     echo "XrayR config             - 显示配置文件内容"
     echo "XrayR install            - 安装 XrayR"
     echo "XrayR uninstall          - 卸载 XrayR"
-    echo "XrayR version            - 查看 XrayR 版本"
+    echo "XrayR version            - 查看 XrayR Version"
     echo "------------------------------------------"
 }
 
@@ -3843,16 +3843,16 @@ function downgradeXray(){
     echo
 
 
-    yellow " 请选择 Air-Universe 降级到的版本, 默认不降级"
-    red " 注意 Air-Universe 最新版不支持 Xray 1.5.0或更老版本"
-    red " 如需要使用Xray 1.5.0或更老版本的Xray, 请选择 Air-Universe 1.0.0或 0.9.2"
+    yellow " please choose Air-Universe 降级到的Version, 默认不降级"
+    red " 注意 Air-Universe 最新版不支持 Xray 1.5.0or更老Version"
+    red " 如需要使用Xray 1.5.0or更老Version的Xray, please choose Air-Universe 1.0.0or 0.9.2"
     echo
-    green " 1. 不降级 使用最新版本"
-    green " 2. 1.1.1 (不支持 Xray 1.5.0或更老版本)"
-    green " 3. 1.0.0 (仅支持 Xray 1.5.0或更老版本)"
-    green " 4. 0.9.2 (仅支持 Xray 1.5.0或更老版本)"
+    green " 1. 不降级 使用最新Version"
+    green " 2. 1.1.1 (不支持 Xray 1.5.0or更老Version)"
+    green " 3. 1.0.0 (仅支持 Xray 1.5.0or更老Version)"
+    green " 4. 0.9.2 (仅支持 Xray 1.5.0or更老Version)"
     echo
-    read -p "请选择Air-Universe版本? 直接回车默认选1, 请输入纯数字:" isAirUniverseVersionInput
+    read -p "please chooseAir-UniverseVersion? 直接回车默认选1, Please enter pure numbers:" isAirUniverseVersionInput
     isAirUniverseVersionInput=${isAirUniverseVersionInput:-1}
 
 
@@ -3871,7 +3871,7 @@ function downgradeXray(){
 
     if [[ "${isAirUniverseVersionInput}" == "1" ]]; then
         green " =================================================="
-        green "  已选择不降级 使用最新版本 Air-Universe ${downloadAirUniverseVersion}"
+        green "  已选择不降级 使用最新Version Air-Universe ${downloadAirUniverseVersion}"
         green " =================================================="
         echo
     else
@@ -3907,9 +3907,9 @@ function downgradeXray(){
 
 
     echo
-    yellow " 请选择Xray降级到的版本, 默认直接回车为不降级"
+    yellow " please chooseXray降级到的Version, The default is to enter directly不降级"
     echo
-    green " 1. 不降级 使用最新版本"
+    green " 1. 不降级 使用最新Version"
 
     if [[ "${isAirUniverseVersionInput}" == "1" || "${isAirUniverseVersionInput}" == "2" ]]; then
         green " 2. 1.5.5"
@@ -3924,7 +3924,7 @@ function downgradeXray(){
     fi
 
     echo
-    read -p "请选择Xray版本? 直接回车默认选1, 请输入纯数字:" isXrayVersionInput
+    read -p "please chooseXrayVersion? 直接回车默认选1, Please enter pure numbers:" isXrayVersionInput
     isXrayVersionInput=${isXrayVersionInput:-1}
 
     downloadXrayVersion=$(getGithubLatestReleaseVersion "XTLS/Xray-core")
@@ -3959,7 +3959,7 @@ function downgradeXray(){
 
     if [[ "${isXrayVersionInput}" == "1" ]]; then
         green " =================================================="
-        green "  已选择不降级 使用最新版本 Xray ${downloadXrayVersion}"
+        green "  已选择不降级 使用最新Version Xray ${downloadXrayVersion}"
         green " =================================================="
         echo
     else
@@ -4056,11 +4056,11 @@ function installAirUniverse(){
     if test -s ${configAirUniverseConfigFilePath}; then
 
         echo
-        green "请选择SSL证书申请方式: 1 通过acme.sh申请证书, 2 不申请证书"
-        green "默认直接回车为通过acme.sh申请证书, 支持 http 和 dns 等更多方式申请证书, 推荐使用"
-        green "注: Air-Universe 本身没有自动获取证书功能, 使用 acme.sh 申请证书"
+        green "please chooseSSL证书Application方式: 1 passacme.shApplication证书, 2 不Application证书"
+        green "The default is to enter directlypassacme.shApplication证书, 支持 http 和 dns 等更多方式Application证书, 推荐使用"
+        green "注: Air-Universe 本身没有自动获取证书功能, 使用 acme.sh Application证书"
         echo
-        read -r -p "请选择SSL证书申请方式 ? 默认直接回车为申请证书, 选否则不申请证书, 请输入[Y/n]:" isSSLRequestHTTPInput
+        read -r -p "please chooseSSL证书Application方式 ? The default is to enter directlyApplication证书, 选否则不Application证书, please enter[Y/n]:" isSSLRequestHTTPInput
         isSSLRequestHTTPInput=${isSSLRequestHTTPInput:-Y}
 
         if [[ $isSSLRequestHTTPInput == [Yy] ]]; then
@@ -4113,13 +4113,13 @@ EOM
             echo
             echo
             green " =================================================="
-            green " Air-Universe 安装成功 !"
+            green " Air-Universe Successful installation !"
             green " =================================================="
             
             manageAirUniverse
         else
             echo
-            green "不申请SSL证书"
+            green "不ApplicationSSL证书"
             read -r -p "Press enter to continue. 按回车继续运行 airu 命令"
             airu
         fi
@@ -4130,7 +4130,7 @@ EOM
         echo
         green "是否安装 Nginx web服务器, 安装Nginx可以提高安全性"
         echo
-        read -r -p "是否安装 Nginx web服务器? 直接回车默认不安装, 请输入[y/N]:" isNginxAlistInstallInput
+        read -r -p "是否安装 Nginx web服务器? 直接回车默认不安装, please enter[y/N]:" isNginxAlistInstallInput
         isNginxAlistInstallInput=${isNginxAlistInstallInput:-n}
 
         if [[ "${isNginxAlistInstallInput}" == [Yy] ]]; then
@@ -4162,14 +4162,14 @@ EOM
 function inputUnlockV2rayServerInfo(){
             echo
             echo
-            yellow " 请选择可解锁流媒体的V2ray或Xray服务器的协议 "
+            yellow " please choose可解锁流媒体的V2rayorXray服务器的协议 "
             green " 1. VLess + TCP + TLS"
             green " 2. VLess + TCP + XTLS"
             green " 3. VLess + WS + TLS (支持CDN)"
             green " 4. VMess + TCP + TLS"
             green " 5. VMess + WS + TLS (支持CDN)"
             echo
-            read -p "请选择协议? 直接回车默认选3, 请输入纯数字:" isV2rayUnlockServerProtocolInput
+            read -p "please choose协议? 直接回车默认选3, Please enter pure numbers:" isV2rayUnlockServerProtocolInput
             isV2rayUnlockServerProtocolInput=${isV2rayUnlockServerProtocolInput:-3}
 
             isV2rayUnlockOutboundServerProtocolText="vless"
@@ -4182,8 +4182,8 @@ function inputUnlockV2rayServerInfo(){
             if [[ $isV2rayUnlockServerProtocolInput == "3" ||  $isV2rayUnlockServerProtocolInput == "5" ]]; then
                 isV2rayUnlockOutboundServerTCPText="ws"
                 echo
-                yellow " 请填写可解锁流媒体的V2ray或Xray服务器Websocket Path, 默认为/"
-                read -p "请填写Websocket Path? 直接回车默认为/ , 请输入(不要包含/):" isV2rayUnlockServerWSPathInput
+                yellow " 请填写可解锁流媒体的V2rayorXray服务器Websocket Path, The default is/"
+                read -p "请填写Websocket Path? 直接回车The default is/ , please enter(不要包含/):" isV2rayUnlockServerWSPathInput
                 isV2rayUnlockServerWSPathInput=${isV2rayUnlockServerWSPathInput:-""}
                 read -r -d '' unlockOutboundServerWebSocketSettingText << EOM
                 ,
@@ -4201,10 +4201,10 @@ EOM
                 isV2rayUnlockOutboundServerTLSText="xtls"
 
                 echo
-                yellow " 请选择可解锁流媒体的V2ray或Xray服务器 XTLS模式下的Flow "
+                yellow " please choose可解锁流媒体的V2rayorXray服务器 XTLSmodel下的Flow "
                 green " 1. VLess + TCP + XTLS (xtls-rprx-direct) 推荐"
                 green " 2. VLess + TCP + XTLS (xtls-rprx-splice) 此项可能会无法连接"
-                read -p "请选择Flow 参数? 直接回车默认选1, 请输入纯数字:" isV2rayUnlockServerFlowInput
+                read -p "please chooseFlow 参数? 直接回车默认选1, Please enter pure numbers:" isV2rayUnlockServerFlowInput
                 isV2rayUnlockServerFlowInput=${isV2rayUnlockServerFlowInput:-1}
 
                 unlockOutboundServerXTLSFlowValue="xtls-rprx-direct"
@@ -4220,18 +4220,18 @@ EOM
 
 
             echo
-            yellow " 请填写可解锁流媒体的V2ray或Xray服务器地址, 例如 www.example.com"
-            read -p "请填写可解锁流媒体服务器地址? 直接回车默认为本机, 请输入:" isV2rayUnlockServerDomainInput
+            yellow " 请填写可解锁流媒体的V2rayorXray服务器地址, E.g www.example.com"
+            read -p "请填写可解锁流媒体服务器地址? 直接回车The default is本机, please enter:" isV2rayUnlockServerDomainInput
             isV2rayUnlockServerDomainInput=${isV2rayUnlockServerDomainInput:-127.0.0.1}
 
             echo
-            yellow " 请填写可解锁流媒体的V2ray或Xray服务器端口号, 例如 443"
-            read -p "请填写可解锁流媒体服务器地址? 直接回车默认为443, 请输入:" isV2rayUnlockServerPortInput
+            yellow " 请填写可解锁流媒体的V2rayorXray服务器端口号, E.g 443"
+            read -p "请填写可解锁流媒体服务器地址? 直接回车The default is443, please enter:" isV2rayUnlockServerPortInput
             isV2rayUnlockServerPortInput=${isV2rayUnlockServerPortInput:-443}
 
             echo
-            yellow " 请填写可解锁流媒体的V2ray或Xray服务器的用户UUID, 例如 4aeaf80d-f89e-46a2-b3dc-bb815eae75ba"
-            read -p "请填写用户UUID? 直接回车默认为111, 请输入:" isV2rayUnlockServerUserIDInput
+            yellow " 请填写可解锁流媒体的V2rayorXray服务器的用户UUID, E.g 4aeaf80d-f89e-46a2-b3dc-bb815eae75ba"
+            read -p "请填写用户UUID? 直接回车The default is111, please enter:" isV2rayUnlockServerUserIDInput
             isV2rayUnlockServerUserIDInput=${isV2rayUnlockServerUserIDInput:-111}
 
 
@@ -4276,8 +4276,8 @@ function replaceAirUniverseConfigWARP(){
     echo
     green " =================================================="
     yellow " 是否使用 DNS 解锁流媒体 Netflix HBO Disney 等流媒体网站"
-    green " 如需解锁请填入 解锁 Netflix 的DNS服务器的IP地址, 例如 8.8.8.8"
-    read -p "是否使用DNS解锁流媒体? 直接回车默认不解锁, 解锁请输入DNS服务器的IP地址:" isV2rayUnlockDNSInput
+    green " 如需解锁请填入 解锁 Netflix 的DNS服务器的IP地址, E.g 8.8.8.8"
+    read -p "是否使用DNS解锁流媒体? 直接回车默认不解锁, 解锁please enterDNS服务器的IP地址:" isV2rayUnlockDNSInput
     isV2rayUnlockDNSInput=${isV2rayUnlockDNSInput:-n}
 
     V2rayDNSUnlockText="AsIs"
@@ -4336,13 +4336,13 @@ EOM
     green " 1. 不使用解锁"
     green " 2. 使用 WARP Sock5 代理解锁 推荐使用"
     green " 3. 使用 WARP IPv6 解锁"
-    green " 4. 通过转发到可解锁的v2ray或xray服务器解锁"
+    green " 4. pass转发到可解锁的v2rayorxray服务器解锁"
     echo
-    green " 默认选1 不解锁. 选择2,3解锁需要安装好 Wireguard 与 Cloudflare WARP, 可重新运行本脚本选择第一项安装".
-    red " 推荐先安装 Wireguard 与 Cloudflare WARP 后,再安装v2ray或xray. 实际上先安装v2ray或xray, 后安装Wireguard 与 Cloudflare WARP也没问题"
-    red " 但如果先安装v2ray或xray, 选了解锁google或其他流媒体, 那么会暂时无法访问google和其他视频网站, 需要继续安装Wireguard 与 Cloudflare WARP解决"
+    green " 默认选1 不解锁. 选择2,3解锁需要安装好 Wireguard and Cloudflare WARP, 可重新运行本脚本选择第一项安装".
+    red " 推荐先安装 Wireguard and Cloudflare WARP 后,再安装v2rayorxray. 实际上先安装v2rayorxray, 后安装Wireguard and Cloudflare WARP也没问题"
+    red " 但如果先安装v2rayorxray, 选了解锁googleor其他流媒体, 那么会暂时无法访问google和其他视频网站, 需要继续安装Wireguard and Cloudflare WARP解决"
     echo
-    read -p "请输入? 直接回车默认选1 不解锁, 请输入纯数字:" isV2rayUnlockWarpModeInput
+    read -p "please enter? 直接回车默认选1 不解锁, Please enter pure numbers:" isV2rayUnlockWarpModeInput
     isV2rayUnlockWarpModeInput=${isV2rayUnlockWarpModeInput:-1}
 
     V2rayUnlockVideoSiteRuleText=""
@@ -4358,7 +4358,7 @@ EOM
 
     if [[ -f "${configWARPPortFilePath}" ]]; then
         configWARPPortLocalServerPort="$(cat ${configWARPPortFilePath})"
-        configWARPPortLocalServerText="检测到本机已安装 WARP Sock5, 端口号 ${configWARPPortLocalServerPort}"
+        configWARPPortLocalServerText="detected本机已安装 WARP Sock5, 端口号 ${configWARPPortLocalServerPort}"
     fi
     
     if [[ $isV2rayUnlockWarpModeInput == "1" ]]; then
@@ -4368,12 +4368,12 @@ EOM
             V2rayUnlockVideoSiteOutboundTagText="WARP_out"
 
             echo
-            read -p "请输入WARP Sock5 代理服务器地址? 直接回车默认本机 127.0.0.1, 请输入:" unlockWARPServerIpInput
+            read -p "please enterWARP Sock5 代理服务器地址? 直接回车默认本机 127.0.0.1, please enter:" unlockWARPServerIpInput
             unlockWARPServerIpInput=${unlockWARPServerIpInput:-127.0.0.1}
 
             echo
             yellow " ${configWARPPortLocalServerText}"
-            read -p "请输入WARP Sock5 代理服务器端口号? 直接回车默认${configWARPPortLocalServerPort}, 请输入纯数字:" unlockWARPServerPortInput
+            read -p "please enterWARP Sock5 代理服务器端口号? 直接回车默认${configWARPPortLocalServerPort}, Please enter pure numbers:" unlockWARPServerPortInput
             unlockWARPServerPortInput=${unlockWARPServerPortInput:-$configWARPPortLocalServerPort}
 
         elif [[ $isV2rayUnlockWarpModeInput == "3" ]]; then
@@ -4383,8 +4383,8 @@ EOM
         elif [[ $isV2rayUnlockWarpModeInput == "4" ]]; then
 
             echo
-            green " 已选择4 通过转发到可解锁的v2ray或xray服务器解锁"
-            green " 可自行修改v2ray或xray配置, 在 outbounds 字段中增加一个tag为 V2Ray_out 的可解锁的v2ray服务器"
+            green " 已选择4 pass转发到可解锁的v2rayorxray服务器解锁"
+            green " 可自行修改v2rayorxray配置, 在 outbounds 字段中增加一个tag为 V2Ray_out 的可解锁的v2ray服务器"
 
             V2rayUnlockVideoSiteOutboundTagText="V2Ray_out"
 
@@ -4395,7 +4395,7 @@ EOM
         echo
         echo
         green " =================================================="
-        yellow " 请选择要解锁的流媒体网站:"
+        yellow " please choose要解锁的流媒体网站:"
         echo
         green " 1. 不解锁"
         green " 2. 解锁 Netflix 限制"
@@ -4407,7 +4407,7 @@ EOM
         green " 8. 同时解锁 Netflix, Hulu, HBO, Disney, Spotify, Youtube 和 Pornhub 限制"
         green " 9. 解锁 全部流媒体 包括 Netflix, Youtube, Hulu, HBO, Disney, BBC, Fox, niconico, dmm, Spotify, Pornhub 等"
         echo
-        read -p "请输入解锁选项? 直接回车默认选1 不解锁, 请输入纯数字:" isV2rayUnlockVideoSiteInput
+        read -p "please enter解锁选项? 直接回车默认选1 不解锁, Please enter pure numbers:" isV2rayUnlockVideoSiteInput
         isV2rayUnlockVideoSiteInput=${isV2rayUnlockVideoSiteInput:-1}
 
         if [[ $isV2rayUnlockVideoSiteInput == "2" ]]; then
@@ -4444,7 +4444,7 @@ EOM
     echo
     echo
     yellow " 某大佬提供了可以解锁Netflix新加坡区的V2ray服务器, 不保证一直可用"
-    read -p "是否通过神秘力量解锁Netflix新加坡区? 直接回车默认不解锁, 请输入[y/N]:" isV2rayUnlockGoNetflixInput
+    read -p "是否pass神秘力量解锁Netflix新加坡区? 直接回车默认不解锁, please enter[y/N]:" isV2rayUnlockGoNetflixInput
     isV2rayUnlockGoNetflixInput=${isV2rayUnlockGoNetflixInput:-n}
 
     v2rayConfigRouteGoNetflixInput=""
@@ -4500,14 +4500,14 @@ EOM
     echo
     echo
     green " =================================================="
-    yellow " 请选择 避免弹出 Google reCAPTCHA 人机验证的方式"
+    yellow " please choose 避免弹出 Google reCAPTCHA 人机验证的方式"
     echo
     green " 1. 不解锁"
     green " 2. 使用 WARP Sock5 代理解锁"
     green " 3. 使用 WARP IPv6 解锁 推荐使用"
-    green " 4. 通过转发到可解锁的v2ray或xray服务器解锁"
+    green " 4. pass转发到可解锁的v2rayorxray服务器解锁"
     echo
-    read -p "请输入解锁选项? 直接回车默认选1 不解锁, 请输入纯数字:" isV2rayUnlockGoogleInput
+    read -p "please enter解锁选项? 直接回车默认选1 不解锁, Please enter pure numbers:" isV2rayUnlockGoogleInput
     isV2rayUnlockGoogleInput=${isV2rayUnlockGoogleInput:-1}
 
     if [[ $isV2rayUnlockWarpModeInput == $isV2rayUnlockGoogleInput ]]; then
@@ -4538,12 +4538,12 @@ EOM
         if [[ $isV2rayUnlockGoogleInput == "2" ]]; then
             V2rayUnlockGoogleOutboundTagText="WARP_out"
             echo
-            read -p "请输入WARP Sock5 代理服务器地址? 直接回车默认本机 127.0.0.1, 请输入:" unlockWARPServerIpInput
+            read -p "please enterWARP Sock5 代理服务器地址? 直接回车默认本机 127.0.0.1, please enter:" unlockWARPServerIpInput
             unlockWARPServerIpInput=${unlockWARPServerIpInput:-127.0.0.1}
 
             echo
             yellow " ${configWARPPortLocalServerText}"
-            read -p "请输入WARP Sock5 代理服务器端口号? 直接回车默认${configWARPPortLocalServerPort}, 请输入纯数字:" unlockWARPServerPortInput
+            read -p "please enterWARP Sock5 代理服务器端口号? 直接回车默认${configWARPPortLocalServerPort}, Please enter pure numbers:" unlockWARPServerPortInput
             unlockWARPServerPortInput=${unlockWARPServerPortInput:-$configWARPPortLocalServerPort}           
 
         elif [[ $isV2rayUnlockGoogleInput == "3" ]]; then
@@ -4727,10 +4727,10 @@ function manageAirUniverse(){
     echo "airu enable       - 设置 Air-Universe 开机自启"
     echo "airu disable      - 取消 Air-Universe 开机自启"
     echo "airu log          - 查看 Air-Universe 日志"
-    echo "airu update x.x.x - 更新 Air-Universe 指定版本"
+    echo "airu update x.x.x - 更新 Air-Universe 指定Version"
     echo "airu install      - 安装 Air-Universe"
     echo "airu uninstall    - 卸载 Air-Universe"
-    echo "airu version      - 查看 Air-Universe 版本"
+    echo "airu version      - 查看 Air-Universe Version"
     echo "------------------------------------------"
     green " Air-Universe 配置文件 ${configAirUniverseConfigFilePath} "
     green " Xray 配置文件 ${configAirUniverseXrayConfigFilePath}"
@@ -4828,7 +4828,7 @@ configNetflixMitmToken="-t token123"
 function installShareNetflixAccount(){
     echo
     green " ================================================== "
-    yellow " 准备安装Netflix账号共享 服务器端程序"
+    yellow " ready to installNetflix账号共享 服务器端程序"
     yellow " 提供共享服务需要有一个Netflix账号 "
     yellow " 所安装的服务器 需要已原生解锁Netflix"
     red " 请务必用于私人用途 不要公开分享. Netflix也限制了同时在线人数"
@@ -4837,7 +4837,7 @@ function installShareNetflixAccount(){
     promptContinueOpeartion 
 
     echo
-    read -p "是否生成随机的 端口号? 直接回车默认 34567 不生成随机端口号, 请输入[y/N]:" isNetflixMimePortInput
+    read -p "是否生成随机的 端口号? 直接回车默认 34567 不生成随机端口号, please enter[y/N]:" isNetflixMimePortInput
     isNetflixMimePortInput=${isNetflixMimePortInput:-n}
 
     if [[ $isNetflixMimePortInput == [Nn] ]]; then
@@ -4847,7 +4847,7 @@ function installShareNetflixAccount(){
     fi
 
     echo
-    read -p "是否生成随机的管理员token密码? 直接回车默认 token123 不生成随机token, 请输入[y/N]:" isNetflixMimeTokenInput
+    read -p "是否生成随机的管理员token密码? 直接回车默认 token123 不生成随机token, please enter[y/N]:" isNetflixMimeTokenInput
     isNetflixMitmTokenInput=${isNetflixMitmTokenInput:-n}
 
     if [[ $isNetflixMitmTokenInput == [Nn] ]]; then
@@ -4903,7 +4903,7 @@ cat > ${netflixMitmToolDownloadFolder}/netflix_mitm_readme <<-EOF
 
 chrome 可以用 SwitchyOmega 插件作为 http代理 https://github.com/FelisCatus/SwitchyOmega 
 
-新建一个情景例如名字叫奈飞代理 输入代理http服务器 你的ip 端口 ${configNetflixMitmPort}   
+新建一个情景E.g名字叫奈飞代理 输入代理http服务器 你的ip 端口 ${configNetflixMitmPort}   
  
 然后在自动切换 菜单里面 添加奈飞的几个域名 选择走奈飞代理这个情景 就可以了
 
@@ -4924,7 +4924,7 @@ nflxvideo.net
 EOF
 
 	green " ================================================== "
-	green " Netflix账号共享 服务器端程序 安装成功 !"
+	green " Netflix账号共享 服务器端程序 Successful installation !"
     green " 重启命令: systemctl restart netflix_mitm.service"
 	green " 查看运行状态命令:  systemctl status netflix_mitm.service "
 	green " 查看日志命令: journalctl -n 40 -u netflix_mitm.service "
@@ -5117,7 +5117,7 @@ function startMenuOther(){
         ;;
         * )
             clear
-            red "请输入正确数字 !"
+            red "please enter正确数字 !"
             sleep 2s
             startMenuOther
         ;;
@@ -5160,9 +5160,9 @@ function start_menu(){
     green " 6. 用VI 编辑 /etc/hosts"
     echo
     green " 11. 安装 Vim Nano Micro 编辑器"
-    green " 12. 安装 Nodejs 与 PM2"
-    green " 13. 安装 Docker 与 Docker Compose"
-    red " 14. 卸载 Docker 与 Docker Compose"
+    green " 12. 安装 Nodejs and PM2"
+    green " 13. 安装 Docker and Docker Compose"
+    red " 14. 卸载 Docker and Docker Compose"
     green " 15. 设置 Docker Hub 镜像 "
     green " 16. 安装 Portainer "
     echo
@@ -5193,10 +5193,10 @@ function start_menu(){
     red " 52. 卸载 Air-Universe"
     green " 53. 停止, 重启, 查看日志等, 管理 Air-Universe 服务器端"
     green " 54. 配合 WARP (Wireguard) 使用IPV6 解锁 google人机验证和 Netflix等流媒体网站"
-    green " 55. 升级或降级 Air-Universe 到 1.0.0 or 0.9.2, 降级 Xray 到 1.5或1.4"
-    green " 56. 重新申请证书 并修改 Air-Universe 配置文件 ${configAirUniverseConfigFilePath}"
+    green " 55. 升级or降级 Air-Universe 到 1.0.0 or 0.9.2, 降级 Xray 到 1.5or1.4"
+    green " 56. 重新Application证书 并修改 Air-Universe 配置文件 ${configAirUniverseConfigFilePath}"
     echo 
-    green " 61. 单独申请域名SSL证书"
+    green " 61. 单独Application域名SSL证书"
     echo
     green " 77. 子菜单 安装 V2board 服务器端 XrayR, V2Ray-Poseidon, Soga"
     echo
@@ -5407,7 +5407,7 @@ whoami
         ;;
         * )
             clear
-            red "请输入正确数字 !"
+            red "please enter正确数字 !"
             sleep 2s
             start_menu
         ;;
