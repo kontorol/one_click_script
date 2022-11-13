@@ -389,7 +389,7 @@ function changeLinuxSSHPort(){
 
 
 
-# 设置北京时区
+# set up北京时区
 function setLinuxDateZone(){
 
     tempCurrentDateZone=$(date +'%z')
@@ -1148,7 +1148,7 @@ configSSLCertFullchainFilename="server.crt"
 
 function getHTTPSCertificateWithAcme(){
 
-    # Applicationhttps证书
+    # ApplicationhttpsCertificate
 	mkdir -p ${configSSLCertPath}
 	mkdir -p ${configWebsitePath}
 	curl https://get.acme.sh | sh
@@ -1318,7 +1318,7 @@ function getHTTPSCertificateWithAcme(){
 
         echo
         green "please choose DNS provider DNS provider: 1 CloudFlare, 2 AliYun,  3 DNSPod(Tencent), 4 GoDaddy "
-        red "注意 CloudFlare For some free domains E.g .tk .cf etc. Use of API ApplicationDNS certificates is no longer supported "
+        red "Notice CloudFlare For some free domains E.g .tk .cf etc. Use of API ApplicationDNS certificates is no longer supported "
         echo
         read -r -p "please choose DNS provider ? The default is to enter directly 1. CloudFlare, Please enter pure numbers:" isAcmeSSLDNSProviderInput
         isAcmeSSLDNSProviderInput=${isAcmeSSLDNSProviderInput:-1}    
@@ -1581,13 +1581,13 @@ configAlistSystemdServicePath="/etc/systemd/system/alist.service"
 function installAlist(){
     echo
     green " =================================================="
-    green " please choose 安装/更新/删除 Alist "
-    green " 1. 安装 Alist "
-    green " 2. 安装 Alist + Nginx (需要域名 并已解析到本机IP)"
-    green " 3. 更新 Alist"  
-    red " 4. 删除 Alist"     
+    green " please choose install/update/remove Alist "
+    green " 1. Install Alist "
+    green " 2. Install Alist + Nginx (A domain name is required and resolved to the local IP)"
+    green " 3. renew Alist"  
+    red " 4. delete Alist"     
     echo
-    read -r -p "Please enter pure numbers, The default is安装:" languageInput
+    read -r -p "Please enter pure numbers, The default is install:" languageInput
     
     createUserWWW
 
@@ -1800,20 +1800,20 @@ EOF
     green " ================================================== "
     green " Cloudreve Installed ! Working port: ${configCloudrevePort}"
     green " Please visit http://your ip:${configCloudrevePort}"
-    green " 如无法访问, 请设置Firewall防火墙规则 放行 ${configCloudrevePort} 端口"
-    green " 查看运行状态命令: systemctl status cloudreve  重启: systemctl restart cloudreve "
-    green " Cloudreve INI 配置文件路径: ${configCloudreveIni}"
-    green " Cloudreve 默认SQLite 数据库文件路径: ${configCloudreveCommandFolder}/cloudreve.db"
-    green " Cloudreve readme 账号密码文件路径: ${configCloudreveReadme}"
+    green " If you can't access, please set Firewall firewall rules to let go ${configCloudrevePort} port"
+    green " View running status command: systemctl status cloudreve  reboot: systemctl restart cloudreve "
+    green " Cloudreve INI configuration file path: ${configCloudreveIni}"
+    green " Cloudreve Default SQLite database file path: ${configCloudreveCommandFolder}/cloudreve.db"
+    green " Cloudreve readme Account password file path: ${configCloudreveReadme}"
     
 
     cat ${configCloudreveReadme}
     green " ================================================== "
 
     echo
-    green "是否继续安装 Nginx web服务器, 安装Nginx可以提高安全性并提供更多功能"
-    green "如要安装 Nginx 需要提供域名, 并设置好域名DNS已解析到本机IP"
-    read -p "是否安装 Nginx web服务器? 直接回车默认安装, please enter[Y/n]:" isNginxInstallInput
+    green "Whether to continue the installation Nginx web server, Installing Nginx improves security and provides more features"
+    green "To install Nginx Domain name required, And set the domain name DNS has been resolved to the local IP"
+    read -p "Whether to install Nginx web server? Enter directly to install by default, please enter[Y/n]:" isNginxInstallInput
     isNginxInstallInput=${isNginxInstallInput:-Y}
 
     if [[ "${isNginxInstallInput}" == [Yy] ]]; then
@@ -1830,7 +1830,7 @@ EOF
 function removeCloudreve(){
 
     echo
-    read -p "是否确认卸载 Cloudreve? 直接回车默认卸载, please enter[Y/n]:" isRemoveCloudreveInput
+    read -p "Are you sure to uninstall Cloudreve? Press Enter to uninstall by default, please enter[Y/n]:" isRemoveCloudreveInput
     isRemoveCloudreveInput=${isRemoveCloudreveInput:-Y}
 
     if [[ "${isRemoveCloudreveInput}" == [Yy] ]]; then
@@ -1909,12 +1909,12 @@ function installWebServerNginx(){
 
     echo
     green " ================================================== "
-    yellow "     开始安装 Web服务器 nginx !"
+    yellow "     start installation web server nginx !"
     green " ================================================== "
     echo
 
     if test -s ${nginxConfigPath}; then
-        showHeaderRed "Nginx 已存在, 是否继续安装?" "Nginx already exists. Continue the installation? "
+        showHeaderRed "Nginx existed, Whether to continue the installation?" "Nginx already exists. Continue the installation? "
         promptContinueOpeartion
 
         ${sudoCmd} systemctl stop nginx.service
@@ -1974,7 +1974,7 @@ function installWebServerNginx(){
         configV2rayWebSocketPath=$(cat /dev/urandom | head -1 | md5sum | head -c 8)
         
         echo
-        read -r -p "是否自定义xray的 Websocket 的Path? 直接回车默认创建随机路径, please enter自定义路径(不要输入/):" isV2rayUserWSPathInput
+        read -r -p "Whether to customize xray Websocket of Path? Enter directly to create a random path by default, please enter custom path (don't enter /):" isV2rayUserWSPathInput
         isV2rayUserWSPathInput=${isV2rayUserWSPathInput:-${configV2rayWebSocketPath}}
         
         if [[ -z $isV2rayUserWSPathInput ]]; then
@@ -1986,7 +1986,7 @@ function installWebServerNginx(){
         configV2rayWebSocketPath="9b08c0d789"
 
         echo
-        read -r -p "输入xray的端口号? 直接回车The default is8799, please enter自定义端口号[1-65535]:" configV2rayPort
+        read -r -p "Enter the port number of xray? Enter directly The default is8799, please enter custom port number [1-65535]:" configV2rayPort
         configV2rayPort=${configV2rayPort:-8799}
 
         cat > "${nginxConfigSiteConfPath}/airuniverse.conf" <<-EOF
@@ -2060,7 +2060,7 @@ EOF
             proxy_set_header Host \$http_host;
             proxy_pass http://127.0.0.1:3468;
 
-            # 如果您要使用本地存储策略，请将下一行注释符删除，并更改大小为理论最大文件尺寸
+            # If you want to use the local storage strategy, please delete the comment on the next line and change the size to the theoretical maximum file size
             client_max_body_size  7000m;
         }
     }
@@ -2145,7 +2145,7 @@ EOF
             proxy_redirect off;
             proxy_pass http://127.0.0.1:${configCloudrevePort};
 
-            # 如果您要使用本地存储策略，请将下一行注释符删除，并更改大小为理论最大文件尺寸
+            # If you want to use the local storage strategy, please delete the comment on the next line and change the size to the theoretical maximum file size
             client_max_body_size   7000m;
         }
     }
@@ -2411,24 +2411,24 @@ EOF
 
     echo
     green " ================================================== "
-    green " Web服务器 nginx Successful installation. 站点为 https://${configSSLDomain}"
+    green " web server nginx Successful installation. site is https://${configSSLDomain}"
     echo
-	red " nginx 配置路径 ${nginxConfigPath} "
-	green " nginx 访问日志 ${nginxAccessLogFilePath},  错误日志 ${nginxErrorLogFilePath}  "
-    green " nginx 查看日志命令: journalctl -n 50 -u nginx.service"
-	green " nginx 启动命令: systemctl start nginx.service  停止命令: systemctl stop nginx.service  重启命令: systemctl restart nginx.service"
-	green " nginx 查看运行状态命令: systemctl status nginx.service "
+	red " nginx configuration path ${nginxConfigPath} "
+	green " nginx access log ${nginxAccessLogFilePath},  error log ${nginxErrorLogFilePath}  "
+    green " nginx View log command: journalctl -n 50 -u nginx.service"
+	green " nginx start command: systemctl start nginx.service  stop command: systemctl stop nginx.service  reboot command: systemctl restart nginx.service"
+	green " nginx View running status command: systemctl status nginx.service "
     green " ================================================== "
     echo
 
     if [[ "${configInstallNginxMode}" == "alist" ]]; then
         green " Alist Installed ! Working port: ${configAlistPort}"
         green " Please visit https://${configSSLDomain}"
-        green " 启动命令: systemctl start alist  停止命令: systemctl stop alist "
-        green " 查看运行状态命令: systemctl status alist  重启: systemctl restart alist "
-        green " Cloudreve INI 配置文件路径: /opt/alist/data/config.json "
-        green " Cloudreve 默认SQLite 数据库文件路径: /opt/alist/data/data.db"
-        red " 请在管理面板-> 账号-> 添加-> 类型选择 本地,  把 根目录路径 设置为 ${nginxAlistStoragePath}"
+        green " start command: systemctl start alist  stop command: systemctl stop alist "
+        green " View running status command: systemctl status alist  reboot: systemctl restart alist "
+        green " Cloudreve INI configuration file path: /opt/alist/data/config.json "
+        green " Cloudreve Default SQLite database file path: /opt/alist/data/data.db"
+        red " Please select Local in Admin Panel-> Account-> Add-> Type, and set the Root Directory Path to ${nginxAlistStoragePath}"
 
         green " ================================================== "
     fi
@@ -2436,11 +2436,11 @@ EOF
     if [[ "${configInstallNginxMode}" == "cloudreve" ]]; then
         green " Cloudreve Installed ! Working port: ${configCloudrevePort}"
         green " Please visit https://${configSSLDomain}"
-        green " 查看运行状态命令: systemctl status cloudreve  重启: systemctl restart cloudreve "
-        green " Cloudreve INI 配置文件路径: ${configCloudreveIni}"
-        green " Cloudreve 默认SQLite 数据库文件路径: ${configCloudreveCommandFolder}/cloudreve.db"
-        green " Cloudreve readme 账号密码文件路径: ${configCloudreveReadme}"
-        red " 请在管理面板->存储策略->编辑默认存储策略->存储路径 设置为 ${nginxCloudreveStoragePath}"
+        green " View running status command: systemctl status cloudreve  reboot: systemctl restart cloudreve "
+        green " Cloudreve INI configuration file path: ${configCloudreveIni}"
+        green " Cloudreve Default SQLite database file path: ${configCloudreveCommandFolder}/cloudreve.db"
+        green " Cloudreve readme Account password file path: ${configCloudreveReadme}"
+        red " Please set it as Admin Panel->Storage Policy->Edit Default Storage Policy->Storage Path ${nginxCloudreveStoragePath}"
 
         cat ${configCloudreveReadme}
         green " ================================================== "
@@ -2450,7 +2450,7 @@ EOF
 function removeNginx(){
 
     echo
-    read -r -p "是否确认卸载Nginx? 直接回车默认卸载, please enter[Y/n]:" isRemoveNginxServerInput
+    read -r -p "Are you sure to uninstallNginx? Press Enter to uninstall by default, please enter[Y/n]:" isRemoveNginxServerInput
     isRemoveNginxServerInput=${isRemoveNginxServerInput:-Y}
 
     if [[ "${isRemoveNginxServerInput}" == [Yy] ]]; then
@@ -2458,7 +2458,7 @@ function removeNginx(){
         echo
         if [[ -f "${nginxConfigPath}" ]]; then
         
-            showHeaderRed "准备卸载已安装的nginx"
+            showHeaderRed "Prepare to uninstall installed nginx"
 
             ${sudoCmd} systemctl stop nginx.service
             ${sudoCmd} systemctl disable nginx.service
@@ -2488,7 +2488,7 @@ function removeNginx(){
             rm -rf ${configDownloadTempPath}
 
             echo
-            read -r -p "是否删除证书 和 卸载acme.shApplication证书工具, 由于一天内Application证书有次数限制, 默认建议不删除证书,  please enter[y/N]:" isDomainSSLRemoveInput
+            read -r -p "Whether to delete the certificate and uninstall the acme.shApplication certificate tool, because the number of Application certificates in one day is limited, it is recommended not to delete the certificate by default,  please enter[y/N]:" isDomainSSLRemoveInput
             isDomainSSLRemoveInput=${isDomainSSLRemoveInput:-n}
 
             
@@ -2496,15 +2496,15 @@ function removeNginx(){
                 rm -rf ${configWebsiteFatherPath}
                 ${sudoCmd} bash ${configSSLAcmeScriptPath}/acme.sh --uninstall
                 
-                showHeaderGreen "Nginx 卸载完毕, SSL 证书文件已删除!"
+                showHeaderGreen "Nginx Uninstallation is complete, the SSL certificate file has been delete!"
 
             else
                 rm -rf ${configWebsitePath}
-                showHeaderGreen "Nginx 卸载完毕, 已保留 SSL 证书文件 到 ${configSSLCertPath} "
+                showHeaderGreen "Nginx Uninstallation is complete, the SSL certificate files have been preserved to ${configSSLCertPath} "
             fi
 
         else
-            showHeaderRed "系统没有安装 Nginx, 退出卸载"
+            showHeaderRed "system not installed Nginx, exit uninstall"
         fi
         echo
 
@@ -2571,7 +2571,7 @@ function installEtherpad(){
         showHeaderRed " Etherpad already installed !"
         exit
     fi
-    showHeaderGreen "开始 使用Docker方式 安装 Etherpad "
+    showHeaderGreen "Get started with Docker installation Etherpad "
 
     createNewUserNologin "etherpad"
     ${sudoCmd} mkdir -p "${configEtherpadDockerPath}/data"
@@ -2584,16 +2584,16 @@ function installEtherpad(){
 
 
 
-    read -r -p "please enterAdmin的密码 (The default isadmin):" configEtherpadPasswordInput
+    read -r -p "please enterAdmin password (The default is admin):" configEtherpadPasswordInput
     configEtherpadPasswordInput=${configEtherpadPasswordInput:-admin}
     echo
 
     green " ================================================== "
     echo
-    green "是否安装 Nginx web服务器, 安装Nginx可以提高安全性并提供更多功能"
-    green "如要安装 Nginx 需要提供域名, 并设置好域名DNS已解析到本机IP"
+    green "Whether to install Nginx web server, Installing Nginx improves security and provides more features"
+    green "To install Nginx Domain name required, And set the domain name DNS has been resolved to the local IP"
     echo
-    read -r -p "是否安装 Nginx web服务器? 直接回车默认安装, please enter[Y/n]:" isNginxInstallInput
+    read -r -p "Whether to install Nginx web server? Enter directly to install by default, please enter[Y/n]:" isNginxInstallInput
     isNginxInstallInput=${isNginxInstallInput:-Y}
 
     echo
@@ -2622,7 +2622,7 @@ function installEtherpad(){
 
 function removeEtherpad(){
     echo
-    read -r -p "是否确认卸载Etherpad? 直接回车默认卸载, please enter[Y/n]:" isRemoveEtherpadInput
+    read -r -p "Are you sure to uninstall Etherpad? Press Enter to uninstall by default, please enter[Y/n]:" isRemoveEtherpadInput
     isRemoveEtherpadInput=${isRemoveEtherpadInput:-Y}
 
     if [[ "${isRemoveEtherpadInput}" == [Yy] ]]; then
@@ -2630,7 +2630,7 @@ function removeEtherpad(){
         echo
         if [[ -d "${configEtherpadDockerPath}" ]]; then
 
-            showHeaderGreen "准备卸载已安装的 Etherpad"
+            showHeaderGreen "Prepare to uninstall the installed Etherpad"
 
             dockerIDEtherpad=$(docker ps -a -q --filter ancestor=etherpad/etherpad --format="{{.ID}}")
             if [[ -n "${dockerIDEtherpad}" ]]; then
@@ -2642,10 +2642,10 @@ function removeEtherpad(){
             rm -f "${nginxConfigSiteConfPath}/etherpad_site.conf"
             
             systemctl restart nginx.service
-            showHeaderGreen "已成功卸载 Etherpad Docker Version !"
+            showHeaderGreen "Uninstalled successfully Etherpad Docker Version !"
             
         else
-            showHeaderRed "系统没有安装 Etherpad, 退出卸载"
+            showHeaderRed "system not installed Etherpad, exit uninstall"
         fi
 
     fi
@@ -2667,7 +2667,7 @@ function installNocoDB(){
         showHeaderRed " NocoDB already installed !"
         exit
     fi
-    showHeaderGreen "开始 使用Docker方式 安装 NocoDB "
+    showHeaderGreen "start Using the Docker way Install NocoDB "
 
     ${sudoCmd} mkdir -p "${configNocoDBDockerPath}/data"
     cd "${configNocoDBDockerPath}" || exit
@@ -2677,10 +2677,10 @@ function installNocoDB(){
 
     green " ================================================== "
     echo
-    green "是否安装 Nginx web服务器, 安装Nginx可以提高安全性并提供更多功能"
-    green "如要安装 Nginx 需要提供域名, 并设置好域名DNS已解析到本机IP"
+    green "Whether to install Nginx web server, Installing Nginx improves security and provides more features"
+    green "To install Nginx Domain name required, And set the domain name DNS has been resolved to the local IP"
     echo
-    read -r -p "是否安装 Nginx web服务器? 直接回车默认安装, please enter[Y/n]:" isNginxInstallInput
+    read -r -p "Whether to install Nginx web server? Enter directly to install by default, please enter[Y/n]:" isNginxInstallInput
     isNginxInstallInput=${isNginxInstallInput:-Y}
 
     echo
@@ -2707,7 +2707,7 @@ function installNocoDB(){
 }
 function removeNocoDB(){
     echo
-    read -r -p "是否确认卸载NocoDB? 直接回车默认卸载, please enter[Y/n]:" isRemoveNocoDBInput
+    read -r -p "Are you sure to uninstallNocoDB? Press Enter to uninstall by default, please enter[Y/n]:" isRemoveNocoDBInput
     isRemoveNocoDBInput=${isRemoveNocoDBInput:-Y}
 
     if [[ "${isRemoveNocoDBInput}" == [Yy] ]]; then
@@ -2715,7 +2715,7 @@ function removeNocoDB(){
         echo
         if [[ -d "${configNocoDBDockerPath}" ]]; then
 
-            showHeaderGreen "准备卸载已安装的 NocoDB"
+            showHeaderGreen "Prepare to uninstall the installed NocoDB"
 
             dockerIDNocoDB=$(docker ps -a -q --filter ancestor=nocodb/nocodb --format="{{.ID}}")
             if [[ -n "${dockerIDNocoDB}" ]]; then
@@ -2727,10 +2727,10 @@ function removeNocoDB(){
             rm -f "${nginxConfigSiteConfPath}/nocodb_site.conf"
             
             systemctl restart nginx.service
-            showHeaderGreen "已成功卸载 NocoDB Docker Version !"
+            showHeaderGreen "Uninstalled successfully NocoDB Docker Version !"
             
         else
-            showHeaderRed "系统没有安装 NocoDB, 退出卸载"
+            showHeaderRed "system not installed NocoDB, exit uninstall"
         fi
 
     fi
@@ -2750,7 +2750,7 @@ function installGrist(){
         showHeaderRed " Grist already installed !"
         exit
     fi
-    showHeaderGreen "开始 使用Docker方式 安装 Grist "
+    showHeaderGreen "start Using the Docker way Install Grist "
 
     ${sudoCmd} mkdir -p ${configGristDockerPath}/persist
     cd "${configGristDockerPath}" || exit
@@ -2761,21 +2761,21 @@ function installGrist(){
     green " GRIST_SESSION_SECRET:  ${configGristSecretKey}"
     echo
 
-    read -r -p "please enter邮箱:" configGristEmailInput
+    read -r -p "please enter Email:" configGristEmailInput
     configGristEmailInput=${configGristEmailInput:-you@example.com}
     echo
 
-    read -r -p "please enterTeam名称:" configGristTeamInput
+    read -r -p "please enter Team name:" configGristTeamInput
     configGristTeamInput=${configGristTeamInput:-singleteam}
     echo
 
 
     green " ================================================== "
     echo
-    green "是否安装 Nginx web服务器, 安装Nginx可以提高安全性并提供更多功能"
-    green "如要安装 Nginx 需要提供域名, 并设置好域名DNS已解析到本机IP"
+    green "Whether to install Nginx web server, Installing Nginx improves security and provides more features"
+    green "To install Nginx Domain name required, And set the domain name DNS has been resolved to the local IP"
     echo
-    read -r -p "是否安装 Nginx web服务器? 直接回车默认安装, please enter[Y/n]:" isNginxInstallInput
+    read -r -p "Whether to install Nginx web server? Enter directly to install by default, please enter[Y/n]:" isNginxInstallInput
     isNginxInstallInput=${isNginxInstallInput:-Y}
 
     echo
@@ -2804,7 +2804,7 @@ function installGrist(){
 }
 function removeGrist(){
     echo
-    read -r -p "是否确认卸载Grist? 直接回车默认卸载, please enter[Y/n]:" isRemoveGristInput
+    read -r -p "Are you sure to uninstallGrist? Press Enter to uninstall by default, please enter[Y/n]:" isRemoveGristInput
     isRemoveGristInput=${isRemoveGristInput:-Y}
 
     if [[ "${isRemoveGristInput}" == [Yy] ]]; then
@@ -2812,7 +2812,7 @@ function removeGrist(){
         echo
         if [[ -d "${configGristDockerPath}" ]]; then
 
-            showHeaderGreen "准备卸载已安装的 Grist"
+            showHeaderGreen "Prepare to uninstall the installed Grist"
 
             dockerIDGrist=$(docker ps -a -q --filter ancestor=gristlabs/grist --format="{{.ID}}")
             if [[ -n "${dockerIDGrist}" ]]; then
@@ -2825,9 +2825,9 @@ function removeGrist(){
             rm -f "${nginxConfigSiteConfPath}/grist_site.conf"
             
             systemctl restart nginx.service
-            showHeaderGreen "已成功卸载 Grist Docker Version !"
+            showHeaderGreen "Uninstalled successfully Grist Docker Version !"
         else
-            showHeaderRed "系统没有安装 Grist, 退出卸载"
+            showHeaderRed "system not installed Grist, exit uninstall"
         fi
     fi
 
@@ -2869,20 +2869,20 @@ function removeGrist(){
 
 
 
-# Video Conference System 视频会议系统 安装
+# Video Conference System video conference system Install
 function installJitsiMeet(){
 
-    showHeaderGreen "ready to install 视频会议系统 Jitsi Meet !" \
+    showHeaderGreen "ready to install video conference system Jitsi Meet !" \
     "Minimum Requirements: 4 GB RAM + 2 core CPU "
 
     echo
     green " =================================================="
-    green " please choose安装方式: (The default is 1 Docker方式)"
+    green " please choose Install method: (The default is 1 Docker way)"
     echo
     green " 1. Install Jitsi Meet by Docker"
     green " 2. Install Jitsi Meet directly, only support Debian 10 / Ubuntu 20.04"   
     echo
-    read -r -p "Please enter pure numbers, The default is1 Docker方式:" jitsimeetDockerInput
+    read -r -p "Please enter pure numbers, The default is1 Docker way:" jitsimeetDockerInput
     
     case "${jitsimeetDockerInput}" in
         1 )
@@ -2909,7 +2909,7 @@ function installJitsiMeetByDocker(){
         exit
     fi
 
-    showHeaderGreen "开始安装 Jitsi Meet by Docker"
+    showHeaderGreen "start installation Jitsi Meet by Docker"
 
     mkdir -p "${configJitsiMeetDownloadPath}"
 
@@ -2933,9 +2933,9 @@ function installJitsiMeetByDocker(){
 
     green " =================================================="
     echo
-    read -r -p "please enter已解析到本机的域名: " configSSLDomain
+    read -r -p "please enter has been resolved to the domain name of the machine: " configSSLDomain
     echo
-    read -r -p "please enter邮箱用于ApplicationSSL域名证书: " configEmailForSSLDomain
+    read -r -p "please enter Email is used for Application SSL domain name certificate: " configEmailForSSLDomain
     echo
 
     sed -i "s|HTTP_PORT=8000|HTTP_PORT=80|g" "${configJitsiMeetDockerPath}/.env"
@@ -2956,13 +2956,13 @@ function installJitsiMeetByDocker(){
 
 
     showHeaderGreen "Jitsi Meet installed successfully!" "Visit https://${configSSLDomain} " \
-    "停止命令: docker-compose down | 启动命令: docker-compose up -d " \
-    "Jitsi Meet 项目文件路径 ${configJitsiMeetDockerPath} " \
-    "Web 配置文件路径 ${HOME}/.jitsi-meet-cfg/web/config.js " \
-    "查看日志 web: docker-compose logs -t -f web" \
-    "查看日志 prosody: docker-compose logs -t -f prosody" \
-    "查看日志 jvb: docker-compose logs -t -f jvb" \
-    "查看日志 jicofo: docker-compose logs -t -f jicofo" 
+    "stop command: docker-compose down | start command: docker-compose up -d " \
+    "Jitsi Meet project file path ${configJitsiMeetDockerPath} " \
+    "Web configuration file path ${HOME}/.jitsi-meet-cfg/web/config.js " \
+    "View logs web: docker-compose logs -t -f web" \
+    "View logs prosody: docker-compose logs -t -f prosody" \
+    "View logs jvb: docker-compose logs -t -f jvb" \
+    "View logs jicofo: docker-compose logs -t -f jicofo" 
 
 
 }
@@ -2980,9 +2980,9 @@ function addPasswordForJitsiMeetDocker(){
 
     green " =================================================="
     echo
-    green " 是否需要密码才能发起会议? The default is否 任何人都能发起会议"
+    green " Whether a password is required to initiate a meeting? The default is No Anyone can initiate a meeting"
     echo
-    read -r -p "是否需要密码才能发起会议? 直接回车The default is否, please enter[y/N]:" isJitsiMeetNeedPasswordInput
+    read -r -p "Whether a password is required to initiate a meeting? Enter directly The default is否, please enter[y/N]:" isJitsiMeetNeedPasswordInput
     isJitsiMeetNeedPasswordInput=${isJitsiMeetNeedPasswordInput:-N}
 
     if [[ ${isJitsiMeetNeedPasswordInput} == [Yy] ]]; then
@@ -2995,10 +2995,10 @@ function addPasswordForJitsiMeetDocker(){
         docker-compose up -d
 
         echo
-        read -r -p "please enter发起会议用户名, 直接回车The default isjitsi : " isJitsiMeetUsernameInput
+        read -r -p "please enter Initiate meeting username, Enter directly The default isjitsi : " isJitsiMeetUsernameInput
         isJitsiMeetUsernameInput=${isJitsiMeetUsernameInput:-jitsi}
         echo
-        read -r -p "please enter用户的密码, 直接回车The default isjitsi :" isJitsiMeetUserPasswordInput
+        read -r -p "please enter user's password, Enter directly The default isjitsi :" isJitsiMeetUserPasswordInput
         isJitsiMeetUserPasswordInput=${isJitsiMeetUserPasswordInput:-jitsi}
         echo
 
@@ -3032,7 +3032,7 @@ configJitsiMeetNginxConfigOriginalFolderPath="/etc/nginx/conf.d"
 function installJitsiMeetOnUbuntu(){
 
     if [ "$osRelease" == "centos" ]; then
-        showHeaderRed "不支持 CentOS 系统!  Not support CentOS!"
+        showHeaderRed "not support CentOS system!  Not support CentOS!"
         exit
     else
         sed -i '/packages.prosody.im/d' /etc/apt/sources.list
@@ -3074,7 +3074,7 @@ function installJitsiMeetOnUbuntu(){
     ${sudoCmd} ufw status verbose
 
 
-    showHeaderGreen "开始安装 Jitsi Meet"
+    showHeaderGreen "start installation Jitsi Meet"
 
     mkdir -p ${configJitsiMeetNginxConfigFolderPath}
     mkdir -p ${configJitsiMeetNginxConfigFolder2Path}
@@ -3111,7 +3111,7 @@ function installJitsiMeetOnUbuntu(){
 
     configLocalVPSIp="$(curl https://ipv4.icanhazip.com/)"
     echo
-    read -r -p "please enter本机IP: 直接回车The default is ${configLocalVPSIp}" jitsimeetVPSIPInput
+    read -r -p "please enter Native IP: Enter directly The default is ${configLocalVPSIp}" jitsimeetVPSIPInput
     jitsimeetVPSIPInput=${jitsimeetVPSIPInput:-${configLocalVPSIp}}
 
     sed -i 's|#\?org.ice4j.ice.harvest.STUN_MAPPING_HARVESTER_ADDRESSES|#org.ice4j.ice.harvest.STUN_MAPPING_HARVESTER_ADDRESSES|g' ${configJitsiMeetVideoBridgeFilePath}
@@ -3138,9 +3138,9 @@ function installJitsiMeetOnUbuntu(){
     secureAddPasswordForJitsiMeet "first"
 
     showHeaderGreen "Jitsi Meet installed successfully!" "Running port 80 443 4443 10000 3478 5349 !" \
-    "重启 Videobridge 命令: systemctl restart jitsi-videobridge2 | Log: /var/log/jitsi/jvb.log" \
-    "重启 jicofo 命令: systemctl restart jicofo | Log: /var/log/jitsi/jicofo.log" \
-    "重启 XMPP 命令: systemctl restart prosody | Log: /var/log/prosody/prosody.log"
+    "reboot Videobridge Order: systemctl restart jitsi-videobridge2 | Log: /var/log/jitsi/jvb.log" \
+    "reboot jicofo Order: systemctl restart jicofo | Log: /var/log/jitsi/jicofo.log" \
+    "reboot XMPP Order: systemctl restart prosody | Log: /var/log/prosody/prosody.log"
 
 }
 
@@ -3152,7 +3152,7 @@ function secureAddPasswordForJitsiMeet(){
     
     green " =================================================="
     echo
-    read -r -p "please enter已解析到本机的域名: " configSSLDomain
+    read -r -p "please enter has been resolved to the domain name of the machine: " configSSLDomain
     echo
 
     configJitsiMeetConfigFilePath="/etc/jitsi/meet/${configSSLDomain}-config.js"
@@ -3160,9 +3160,9 @@ function secureAddPasswordForJitsiMeet(){
     configJitsiMeetJicofoFilePath="/etc/jitsi/jicofo/jicofo.conf"
 
     echo
-    green " 是否需要密码才能发起会议? The default is否 任何人都能发起会议"
+    green " Whether a password is required to initiate a meeting? The default is No Anyone can initiate a meeting"
     echo
-    read -r -p "是否需要密码才能发起会议? 直接回车The default is否, please enter[y/N]:" isJitsiMeetNeedPasswordInput
+    read -r -p "Whether a password is required to initiate a meeting? Enter directly The default is否, please enter[y/N]:" isJitsiMeetNeedPasswordInput
     isJitsiMeetNeedPasswordInput=${isJitsiMeetNeedPasswordInput:-N}
 
     if [[ ${isJitsiMeetNeedPasswordInput} == [Yy] ]]; then
@@ -3206,10 +3206,10 @@ EOM
 
 
         echo
-        read -r -p "please enter发起会议用户名, 直接回车The default isjitsi : " isJitsiMeetUsernameInput
+        read -r -p "please enter Initiate meeting username, Enter directly The default isjitsi : " isJitsiMeetUsernameInput
         isJitsiMeetUsernameInput=${isJitsiMeetUsernameInput:-jitsi}
         echo
-        read -r -p "please enter用户的密码, 直接回车The default isjitsi :" isJitsiMeetUserPasswordInput
+        read -r -p "please enter user's password, Enter directly The default isjitsi :" isJitsiMeetUserPasswordInput
         isJitsiMeetUserPasswordInput=${isJitsiMeetUserPasswordInput:-jitsi}
         echo
 
@@ -3251,7 +3251,7 @@ function removeJitsiMeet(){
 
     
     if [ -f "${configJitsiMeetDockerPath}/.env" ]; then
-        showHeaderGreen "准备卸载 Jitsi Meet Docker "
+        showHeaderGreen "ready to uninstall Jitsi Meet Docker "
 
         cd "${configJitsiMeetDockerPath}" || exit
 
@@ -3260,14 +3260,14 @@ function removeJitsiMeet(){
         rm -rf "${configJitsiMeetDockerPath}"
         rm -rf "${HOME}/.jitsi-meet-cfg"
 
-        showHeaderGreen "已成功卸载 Jitsi Meet Docker Version !"
+        showHeaderGreen "Uninstalled successfully Jitsi Meet Docker Version !"
     else
-        showHeaderRed "没有发现 Jitsi Meet Docker !"
+        showHeaderRed "not found Jitsi Meet Docker !"
 
-        showHeaderGreen "准备卸载 视频会议系统 Jitsi Meet 非Docker 安装Version !"
+        showHeaderGreen "ready to uninstall video conferencing system Jitsi Meet non-Docker InstallVersion !"
 
         if [ "$osRelease" == "centos" ]; then
-            showHeaderRed " 不支持 CentOS 系统"
+            showHeaderRed " not support CentOS system"
         else
 
             ${sudoCmd} apt purge -y jigasi jitsi-meet jitsi-meet-web-config jitsi-meet-prosody jitsi-meet-turnserver jitsi-meet-web jicofo jitsi-videobridge2 prosody
@@ -3281,7 +3281,7 @@ function removeJitsiMeet(){
             rm -f /etc/letsencrypt/renewal/*
             rm -f /etc/letsencrypt/keys/*
 
-            showHeaderGreen "已成功卸载 Jitsi Meet 非Docker 安装Version !"
+            showHeaderGreen "Uninstalled successfully Jitsi Meet non-Docker InstallVersion !"
         fi
 
         removeNginx    
@@ -3452,7 +3452,7 @@ EOM
 
 function removeCMSGhost(){
     echo
-    read -r -p "是否确认卸载Ghost? 直接回车默认卸载, please enter[Y/n]:" isRemoveGhostInput
+    read -r -p "Are you sure to uninstallGhost? Press Enter to uninstall by default, please enter[Y/n]:" isRemoveGhostInput
     isRemoveGhostInput=${isRemoveGhostInput:-Y}
 
     if [[ "${isRemoveGhostInput}" == [Yy] ]]; then
@@ -3460,7 +3460,7 @@ function removeCMSGhost(){
         echo
         if [[ -d "${configGhostSitePath}" ]]; then
 
-            showHeaderGreen "准备卸载已安装的 Ghost"
+            showHeaderGreen "Prepare to uninstall the installed Ghost"
 
     su - ${ghostUser} << EOF
     echo "--------------------"
@@ -3479,9 +3479,9 @@ EOF
             rm -f "${nginxConfigSiteConfPath}/ghost_site.conf"
             
             systemctl restart nginx.service
-            showHeaderGreen "已成功卸载 Ghost !"
+            showHeaderGreen "Uninstalled successfully Ghost !"
         else
-            showHeaderRed "系统没有安装 Ghost, 退出卸载"
+            showHeaderRed "system not installed Ghost, exit uninstall"
         fi
 
     fi
@@ -3523,7 +3523,7 @@ configSogaConfigFilePath="/etc/soga/soga.conf"
 function installSoga(){
     echo
     green " =================================================="
-    green "  开始安装 支持V2board面板的 服务器端程序 soga !"
+    green "  start installation Server-side program that supports V2board panels soga !"
     green " =================================================="
     echo
 
@@ -3538,20 +3538,20 @@ function replaceSogaConfig(){
     if test -s ${configSogaConfigFilePath}; then
 
         echo
-        green "please chooseSSL证书Application方式: 1 Soga内置的http方式, 2 passacme.shApplication并放置证书文件"
-        green "The default is to enter directly Soga内置的http自动Applicationmodel"
-        green "选否 则passacme.shApplication证书并放置证书文件, 支持http和dnsmodelApplication证书, 推荐此model"
+        green "please chooseSSL certificateApplication method: 1 Soga's built-in http method, 2 passacme.shApplication and place the certificate file"
+        green "The default is to enter directly Soga's built-in http automatic Application model"
+        green "choose no then passacme.shApplication certificate and place the certificate file, Support http and dnsmodel Application certificates, recommend this model"
         echo
-        green "注意: Soga SSL证书Application方式共有3种: 1 Soga内置的http方式, 2 Soga内置的dns方式, 3 手动放置证书文件 "
-        green "如需要使用 Soga内置的dns方式 ApplicationSSL证书方式, 请手动修改 soga.conf 配置文件"
+        green "Notice: Soga There are 3 types of SSL certificate Application methods: 1 Soga's built-in http method, 2 Soga's built-in dns method, 3 Manually place certificate files "
+        green "use if necessary Soga's built-in dns method Application SSL certificate method, Please edit manually soga.conf configuration file"
         echo
-        read -p "please chooseSSL证书Application方式 ? The default is to enter directlyhttp自动Applicationmodel, 选否则passacme.sh手动Application并放置证书, please enter[Y/n]:" isSSLRequestHTTPInput
+        read -p "please chooseSSL certificateApplication method ? The default is to enter directly http automatic Application model, choose no pass acme.sh manual Application and put the certificate, please enter[Y/n]:" isSSLRequestHTTPInput
         isSSLRequestHTTPInput=${isSSLRequestHTTPInput:-Y}
 
         if [[ $isSSLRequestHTTPInput == [Yy] ]]; then
             echo
             green " ================================================== "
-            yellow " please enter绑定到本VPS的域名 E.gwww.xxx.com: (此步骤请关闭CDN后和nginx后安装 避免80端口占用导致Application证书失败)"
+            yellow " please enter is bound to the domain name of this VPS E.gwww.xxx.com: (In this step, please close the CDN and install after nginx to avoid the failure of the Application certificate due to port 80 occupation)"
             green " ================================================== "
 
             read configSSLDomain
@@ -3569,13 +3569,13 @@ function replaceSogaConfig(){
 
         sed -i "s/cert_domain=/cert_domain=${configSSLDomain}/g" ${configSogaConfigFilePath}
 
-        read -p "please enter面板域名 E.gwww.123.com 不要带有httporhttps前缀 结尾不要带/ :" inputV2boardDomain
+        read -p "please enter Panel Domain Name E.g www.123.com Do not prefix with http or https Don't bring the end/ :" inputV2boardDomain
         sed -i "s?webapi_url=?webapi_url=https://${inputV2boardDomain}/?g" ${configSogaConfigFilePath}
 
-        read -p "please enterwebapi key 即通信密钥:" inputV2boardWebApiKey
+        read -p "please enterwebapi key communication key:" inputV2boardWebApiKey
         sed -i "s/webapi_key=/webapi_key=${inputV2boardWebApiKey}/g" ${configSogaConfigFilePath}
 
-        read -p "please enter节点ID (纯数字):" inputV2boardNodeId
+        read -p "please enter Node ID (pure numbers):" inputV2boardNodeId
         sed -i "s/node_id=1/node_id=${inputV2boardNodeId}/g" ${configSogaConfigFilePath}
     
         soga restart 
@@ -3588,23 +3588,23 @@ function replaceSogaConfig(){
 
 function manageSoga(){
     echo -e ""
-    echo "soga 管理脚本使用方法: "
+    echo "soga How to use the management script: "
     echo "------------------------------------------"
-    echo "soga                    - 显示管理菜单 (功能更多)"
-    echo "soga start              - 启动 soga"
-    echo "soga stop               - 停止 soga"
-    echo "soga restart            - 重启 soga"
-    echo "soga status             - 查看 soga 状态"
-    echo "soga enable             - 设置 soga 开机自启"
-    echo "soga disable            - 取消 soga 开机自启"
-    echo "soga log                - 查看 soga 日志"
-    echo "soga update             - 更新 soga"
-    echo "soga update x.x.x       - 更新 soga 指定Version"
-    echo "soga config             - 显示配置文件内容"
-    echo "soga config xx=xx yy=yy - 自动设置配置文件"
-    echo "soga install            - 安装 soga"
-    echo "soga uninstall          - 卸载 soga"
-    echo "soga version            - 查看 soga Version"
+    echo "soga                    - Show management menu (more functions)"
+    echo "soga start              - start up soga"
+    echo "soga stop               - stop soga"
+    echo "soga restart            - reboot soga"
+    echo "soga status             - Check soga state"
+    echo "soga enable             - set up soga Auto-start"
+    echo "soga disable            - Cancel soga Auto-start"
+    echo "soga log                - Check soga log"
+    echo "soga update             - renew soga"
+    echo "soga update x.x.x       - renew soga Specified version"
+    echo "soga config             - show configuration file contents"
+    echo "soga config xx=xx yy=yy - auto set upconfiguration file"
+    echo "soga install            - Install soga"
+    echo "soga uninstall          - uninstall soga"
+    echo "soga version            - Check soga Version"
     echo "------------------------------------------"
 }
 
@@ -3638,7 +3638,7 @@ configXrayRConfigFilePath="/etc/XrayR/config.yml"
 function installXrayR(){
     echo
     green " =================================================="
-    green "  开始安装 支持V2board面板的 服务器端程序 XrayR !"
+    green "  start installation Server-side program that supports V2board panels XrayR !"
     green " =================================================="
     echo
 
@@ -3659,21 +3659,21 @@ function replaceXrayRConfig(){
     if test -s ${configXrayRConfigFilePath}; then
 
         echo
-        green "please chooseSSL证书Application方式: 1 XrayR内置的http 方式, 2 passacme.sh Application并放置证书文件, "
-        green "The default is to enter directly XrayR内置的http自动Applicationmodel"
-        green "选否则passacme.shApplication证书, 支持http 和 dns 等更多modelApplication证书, 推荐使用"
+        green "please chooseSSL certificateApplication method: 1 XrayR built-in http Way, 2 passacme.sh Application and place the certificate file, "
+        green "The default is to enter directly XrayR built-in http automatic Application model"
+        green "choose no then passacme.shApplication certificate, Support more modelApplication certificates such as http and dns, it is recommended to use"
         echo
-        green "注意: XrayR 的SSL证书Application方式 共有4种: 1 XrayR内置的http 方式, 2 XrayR内置的 dns 方式, 3 file 手动放置证书文件, 4 none 不Application证书"
-        green "如需要使用 XrayR内置的dns ApplicationSSL证书方式, 请手动修改 ${configXrayRConfigFilePath} 配置文件"
+        green "Notice: XrayR There are 4 types of SSL certificates for Application Way: 1 XrayR built-in http Way, 2 XrayR built-in dns Way, 3 file Manually place certificate files, 4 none Not Application certificate"
+        green "use if necessary XrayR built-indns Application SSL certificate method, Please edit manually ${configXrayRConfigFilePath} configuration file"
     
-        read -p "please chooseSSL证书Application方式 ? The default is to enter directlyhttp自动Applicationmodel, 选否则手动放置证书文件同时也会自动Application证书, please enter[Y/n]:" isSSLRequestHTTPInput
+        read -p "please chooseSSL certificateApplication method ? The default is to enter directlyhttp automatic Application model, choose no则Manually place certificate files will also automatically apply the certificate, please enter[Y/n]:" isSSLRequestHTTPInput
         isSSLRequestHTTPInput=${isSSLRequestHTTPInput:-Y}
 
         configXrayRSSLRequestMode="http"
         if [[ $isSSLRequestHTTPInput == [Yy] ]]; then
             echo
             green " ================================================== "
-            yellow " please enter绑定到本VPS的域名 E.gwww.xxx.com: (此步骤请关闭CDN后和nginx后安装 避免80端口占用导致Application证书失败)"
+            yellow " please enter is bound to the domain name of this VPS E.g www.xxx.com: (In this step, please close the CDN and install after nginx to avoid the failure of the Application certificate due to port 80 occupation)"
             green " ================================================== "
 
             read configSSLDomain
@@ -3693,7 +3693,7 @@ function replaceXrayRConfig(){
         sed -i "s/www.xxxx.net/${configSSLDomain}/g" ${configXrayRConfigFilePath}
 
         echo
-        read -p "please choose支持的面板类型 ? The default is to enter directlyV2board, 选否则SSpanel, please enter[Y/n]:" isXrayRPanelTypeInput
+        read -p "please Choose Supported Panel Types ? The default is to enter directlyV2board, choose no then SSpanel, please enter[Y/n]:" isXrayRPanelTypeInput
         isXrayRPanelTypeInput=${isXrayRPanelTypeInput:-Y}
         configXrayRPanelType="SSpanel"
 
@@ -3704,20 +3704,20 @@ function replaceXrayRConfig(){
 
         
         echo
-        green "please enter面板域名, E.gwww.123.com 不要带有httporhttps前缀 结尾不要带/"
-        green "请保证输入的V2boardor其他面板域名支持Https 访问, 如要改成http请手动修改配置文件 ${configXrayRConfigFilePath}"
-        read -p "please enter面板域名 :" inputV2boardDomain
+        green "please enter Panel Domain Name, E.g www.123.com Do not prefix with httporhttps Do not end with /"
+        green "Please ensure that the input domain name of other panels of V2boardor supports Https access, If you want to change to http Please edit manually configuration file ${configXrayRConfigFilePath}"
+        read -p "please enter Panel Domain Name :" inputV2boardDomain
         sed -i "s?http://127.0.0.1:667?https://${inputV2boardDomain}?g" ${configXrayRConfigFilePath}
 
-        read -p "please enterApiKey 即通信密钥:" inputV2boardWebApiKey
+        read -p "please enter ApiKey communication key:" inputV2boardWebApiKey
         sed -i "s/123/${inputV2boardWebApiKey}/g" ${configXrayRConfigFilePath}
 
-        read -p "please enter节点ID (纯数字):" inputV2boardNodeId
+        read -p "please enter Node ID (pure numbers):" inputV2boardNodeId
         sed -i "s/41/${inputV2boardNodeId}/g" ${configXrayRConfigFilePath}
     
 
         echo
-        read -p "please choose支持的节点类型 ? The default is to enter directlyV2ray, 选否则为Trojan, please enter[Y/n]:" isXrayRNodeTypeInput
+        read -p "please Node types supported by choose ? The default is to enter directlyV2ray, choose no is Trojan, please enter[Y/n]:" isXrayRNodeTypeInput
         isXrayRNodeTypeInput=${isXrayRNodeTypeInput:-Y}
         configXrayRNodeType="V2ray"
 
@@ -3727,7 +3727,7 @@ function replaceXrayRConfig(){
 
         else
             echo
-            read -p "是否给V2ray启用Vless协议 ? 默认直接回车选择否,默认启用Vmess协议, 选择是则启用Vless协议, please enter[y/N]:" isXrayRVlessSupportInput
+            read -p "Whether to enable Vless protocol for V2ray ? By default, press Enter to select No, the Vmess protocol is enabled by default, and the Vless protocol is enabled by selecting Yes, please enter[y/N]:" isXrayRVlessSupportInput
             isXrayRVlessSupportInput=${isXrayRVlessSupportInput:-N}
 
             if [[ $isXrayRVlessSupportInput == [Yy] ]]; then
@@ -3735,7 +3735,7 @@ function replaceXrayRConfig(){
             fi
 
             echo
-            read -p "是否给V2ray启用XTLS ? 默认直接回车选择否,默认启用Tls, 选择是则启用XTLS, please enter[y/N]:" isXrayRXTLSSupportInput
+            read -p "Do you want to enable XTLS for V2ray? By default, press Enter to select No, Tls is enabled by default, and XTLS is enabled if Yes is selected, please enter[y/N]:" isXrayRXTLSSupportInput
             isXrayRXTLSSupportInput=${isXrayRXTLSSupportInput:-N}
 
             if [[ $isXrayRXTLSSupportInput == [Yy] ]]; then
@@ -3760,22 +3760,22 @@ function replaceXrayRConfig(){
 
 function manageXrayR(){
     echo -e ""
-    echo "XrayR 管理脚本使用方法 (兼容使用xrayr执行，大小写不敏感): "
+    echo "XrayR How to use the management script (Compatible with xrayr execution, case insensitive): "
     echo "------------------------------------------"
-    echo "XrayR                    - 显示管理菜单 (功能更多)"
-    echo "XrayR start              - 启动 XrayR"
-    echo "XrayR stop               - 停止 XrayR"
-    echo "XrayR restart            - 重启 XrayR"
-    echo "XrayR status             - 查看 XrayR 状态"
-    echo "XrayR enable             - 设置 XrayR 开机自启"
-    echo "XrayR disable            - 取消 XrayR 开机自启"
-    echo "XrayR log                - 查看 XrayR 日志"
-    echo "XrayR update             - 更新 XrayR"
-    echo "XrayR update x.x.x       - 更新 XrayR 指定Version"
-    echo "XrayR config             - 显示配置文件内容"
-    echo "XrayR install            - 安装 XrayR"
-    echo "XrayR uninstall          - 卸载 XrayR"
-    echo "XrayR version            - 查看 XrayR Version"
+    echo "XrayR                    - Show admin menu (function more)"
+    echo "XrayR start              - start up XrayR"
+    echo "XrayR stop               - stop XrayR"
+    echo "XrayR restart            - reboot XrayR"
+    echo "XrayR status             - Check XrayR state"
+    echo "XrayR enable             - set up XrayR Auto-start"
+    echo "XrayR disable            - Cancel XrayR Auto-start"
+    echo "XrayR log                - Check XrayR log"
+    echo "XrayR update             - renew XrayR"
+    echo "XrayR update x.x.x       - renew XrayR Specified version"
+    echo "XrayR config             - show configuration file contents"
+    echo "XrayR install            - Install XrayR"
+    echo "XrayR uninstall          - uninstall XrayR"
+    echo "XrayR version            - Check XrayR Version"
     echo "------------------------------------------"
 }
 
@@ -3838,21 +3838,21 @@ function installAiruAndNginx(){
 function downgradeXray(){
     echo
     green " =================================================="
-    green "  准备降级 Xray 和 Air-Universe !"
+    green "  Prepare to downgrade Xray and Air-Universe !"
     green " =================================================="
     echo
 
 
-    yellow " please choose Air-Universe 降级到的Version, 默认不降级"
-    red " 注意 Air-Universe 最新版不支持 Xray 1.5.0or更老Version"
-    red " 如需要使用Xray 1.5.0or更老Version的Xray, please choose Air-Universe 1.0.0or 0.9.2"
+    yellow " please choose Air-Universe Version to downgrade to, No downgrade by default"
+    red " Notice Air-Universe latest version not support Xray 1.5.0 or older Version"
+    red " use if necessary Xray 1.5.0 or Older Versions of Xray, please choose Air-Universe 1.0.0 or 0.9.2"
     echo
-    green " 1. 不降级 使用最新Version"
-    green " 2. 1.1.1 (不支持 Xray 1.5.0or更老Version)"
-    green " 3. 1.0.0 (仅支持 Xray 1.5.0or更老Version)"
-    green " 4. 0.9.2 (仅支持 Xray 1.5.0or更老Version)"
+    green " 1. Do not downgrade Use the latest version"
+    green " 2. 1.1.1 (not support Xray 1.5.0 or Older Version)"
+    green " 3. 1.0.0 (only supported Xray 1.5.0 or Older Version)"
+    green " 4. 0.9.2 (only supported Xray 1.5.0 or Older Version)"
     echo
-    read -p "please chooseAir-UniverseVersion? 直接回车默认选1, Please enter pure numbers:" isAirUniverseVersionInput
+    read -p "please chooseAir-UniverseVersion? Enter directly and select 1 by default, Please enter pure numbers:" isAirUniverseVersionInput
     isAirUniverseVersionInput=${isAirUniverseVersionInput:-1}
 
 
@@ -3871,7 +3871,7 @@ function downgradeXray(){
 
     if [[ "${isAirUniverseVersionInput}" == "1" ]]; then
         green " =================================================="
-        green "  已选择不降级 使用最新Version Air-Universe ${downloadAirUniverseVersion}"
+        green "  Selected not to downgrade Use the latest version Air-Universe ${downloadAirUniverseVersion}"
         green " =================================================="
         echo
     else
@@ -3907,9 +3907,9 @@ function downgradeXray(){
 
 
     echo
-    yellow " please chooseXray降级到的Version, The default is to enter directly不降级"
+    yellow " please choose Xray Version to downgrade to, The default is to enter directly do not downgrade"
     echo
-    green " 1. 不降级 使用最新Version"
+    green " 1. Do not downgrade Use the latest version"
 
     if [[ "${isAirUniverseVersionInput}" == "1" || "${isAirUniverseVersionInput}" == "2" ]]; then
         green " 2. 1.5.5"
@@ -3924,7 +3924,7 @@ function downgradeXray(){
     fi
 
     echo
-    read -p "please chooseXrayVersion? 直接回车默认选1, Please enter pure numbers:" isXrayVersionInput
+    read -p "please choose Xray Version? Enter directly and select 1 by default, Please enter pure numbers:" isXrayVersionInput
     isXrayVersionInput=${isXrayVersionInput:-1}
 
     downloadXrayVersion=$(getGithubLatestReleaseVersion "XTLS/Xray-core")
@@ -3959,7 +3959,7 @@ function downgradeXray(){
 
     if [[ "${isXrayVersionInput}" == "1" ]]; then
         green " =================================================="
-        green "  已选择不降级 使用最新Version Xray ${downloadXrayVersion}"
+        green "  Do selected not downgrade Use the latest version Xray ${downloadXrayVersion}"
         green " =================================================="
         echo
     else
@@ -4025,7 +4025,7 @@ configXrayPort="$(($RANDOM + 10000))"
 function installAirUniverse(){
     echo
     green " =================================================="
-    green "  开始安装 支持V2board面板的 服务器端程序 Air-Universe !"
+    green "  start installation Server-side program that supports V2board panels Air-Universe !"
     green " =================================================="
     echo
     
@@ -4056,11 +4056,11 @@ function installAirUniverse(){
     if test -s ${configAirUniverseConfigFilePath}; then
 
         echo
-        green "please chooseSSL证书Application方式: 1 passacme.shApplication证书, 2 不Application证书"
-        green "The default is to enter directlypassacme.shApplication证书, 支持 http 和 dns 等更多方式Application证书, 推荐使用"
-        green "注: Air-Universe 本身没有自动获取证书功能, 使用 acme.sh Application证书"
+        green "please chooseSSL certificateApplication method: 1 passacme.sh Application certificate, 2 Not Application certificate"
+        green "The default is to enter directlypassacme.sh Application certificate, support http and dns For more WayApplication certificates, it is recommended to use"
+        green "Note: Air-Universe There is no automatic certificate acquisition function itself, Use acme.sh Application certificate"
         echo
-        read -r -p "please chooseSSL证书Application方式 ? The default is to enter directlyApplication证书, 选否则不Application证书, please enter[Y/n]:" isSSLRequestHTTPInput
+        read -r -p "please choose SSL certificate Application method ? The default is to enter directly Application Certificate, choose no then Not Application certificate, please enter[Y/n]:" isSSLRequestHTTPInput
         isSSLRequestHTTPInput=${isSSLRequestHTTPInput:-Y}
 
         if [[ $isSSLRequestHTTPInput == [Yy] ]]; then
@@ -4119,8 +4119,8 @@ EOM
             manageAirUniverse
         else
             echo
-            green "不ApplicationSSL证书"
-            read -r -p "Press enter to continue. 按回车继续运行 airu 命令"
+            green "Do not Application SSL Certificate"
+            read -r -p "Press enter to continue. Press enter to continue airu Order"
             airu
         fi
 
@@ -4128,9 +4128,9 @@ EOM
 
         green " ================================================== "
         echo
-        green "是否安装 Nginx web服务器, 安装Nginx可以提高安全性"
+        green "Whether to install Nginx web server, Install Nginx can improve security"
         echo
-        read -r -p "是否安装 Nginx web服务器? 直接回车默认不安装, please enter[y/N]:" isNginxAlistInstallInput
+        read -r -p "Whether to install Nginx web server? Enter directly by default Do not Install, please enter[y/N]:" isNginxAlistInstallInput
         isNginxAlistInstallInput=${isNginxAlistInstallInput:-n}
 
         if [[ "${isNginxAlistInstallInput}" == [Yy] ]]; then
@@ -4162,14 +4162,14 @@ EOM
 function inputUnlockV2rayServerInfo(){
             echo
             echo
-            yellow " please choose可解锁流媒体的V2rayorXray服务器的协议 "
+            yellow " please choose to unlock the protocol of the V2ray or Xray server for streaming "
             green " 1. VLess + TCP + TLS"
             green " 2. VLess + TCP + XTLS"
-            green " 3. VLess + WS + TLS (支持CDN)"
+            green " 3. VLess + WS + TLS (supportCDN)"
             green " 4. VMess + TCP + TLS"
-            green " 5. VMess + WS + TLS (支持CDN)"
+            green " 5. VMess + WS + TLS (supportCDN)"
             echo
-            read -p "please choose协议? 直接回车默认选3, Please enter pure numbers:" isV2rayUnlockServerProtocolInput
+                read -p "please choose agreement? Enter directly and select 3 by default, Please enter pure numbers:" isV2rayUnlockServerProtocolInput
             isV2rayUnlockServerProtocolInput=${isV2rayUnlockServerProtocolInput:-3}
 
             isV2rayUnlockOutboundServerProtocolText="vless"
@@ -4182,8 +4182,8 @@ function inputUnlockV2rayServerInfo(){
             if [[ $isV2rayUnlockServerProtocolInput == "3" ||  $isV2rayUnlockServerProtocolInput == "5" ]]; then
                 isV2rayUnlockOutboundServerTCPText="ws"
                 echo
-                yellow " 请填写可解锁流媒体的V2rayorXray服务器Websocket Path, The default is/"
-                read -p "请填写Websocket Path? 直接回车The default is/ , please enter(不要包含/):" isV2rayUnlockServerWSPathInput
+                yellow " Please fill in the V2ray or Xray server Websocket that can unlock streaming media Path, The default is/"
+                read -p "Please fill in Websocket Path? Enter directly The default is/ , please enter(Do not to include/):" isV2rayUnlockServerWSPathInput
                 isV2rayUnlockServerWSPathInput=${isV2rayUnlockServerWSPathInput:-""}
                 read -r -d '' unlockOutboundServerWebSocketSettingText << EOM
                 ,
@@ -4201,10 +4201,10 @@ EOM
                 isV2rayUnlockOutboundServerTLSText="xtls"
 
                 echo
-                yellow " please choose可解锁流媒体的V2rayorXray服务器 XTLSmodel下的Flow "
-                green " 1. VLess + TCP + XTLS (xtls-rprx-direct) 推荐"
-                green " 2. VLess + TCP + XTLS (xtls-rprx-splice) 此项可能会无法连接"
-                read -p "please chooseFlow 参数? 直接回车默认选1, Please enter pure numbers:" isV2rayUnlockServerFlowInput
+                yellow " please choose to unlock V2ray or Xray server for streaming media Flow under XTLSmodel "
+                green " 1. VLess + TCP + XTLS (xtls-rprx-direct) recommend"
+                green " 2. VLess + TCP + XTLS (xtls-rprx-splice) This item may fail to connect"
+                read -p "please chooseFlow parameter? Enter directly and select 1 by default, Please enter pure numbers:" isV2rayUnlockServerFlowInput
                 isV2rayUnlockServerFlowInput=${isV2rayUnlockServerFlowInput:-1}
 
                 unlockOutboundServerXTLSFlowValue="xtls-rprx-direct"
@@ -4220,18 +4220,18 @@ EOM
 
 
             echo
-            yellow " 请填写可解锁流媒体的V2rayorXray服务器地址, E.g www.example.com"
-            read -p "请填写可解锁流媒体服务器地址? 直接回车The default is本机, please enter:" isV2rayUnlockServerDomainInput
+            yellow " Please fill in the V2ray or Xray server address that can unlock streaming media, E.g www.example.com"
+            read -p "Please fill in the address of the unlockable streaming media server? Enter directly The default is native, please enter:" isV2rayUnlockServerDomainInput
             isV2rayUnlockServerDomainInput=${isV2rayUnlockServerDomainInput:-127.0.0.1}
 
             echo
-            yellow " 请填写可解锁流媒体的V2rayorXray服务器端口号, E.g 443"
-            read -p "请填写可解锁流媒体服务器地址? 直接回车The default is443, please enter:" isV2rayUnlockServerPortInput
+            yellow " Please fill in the V2ray or Xray server port number that can unlock streaming media, E.g 443"
+            read -p "Please fill in the address of the unlockable streaming media server? Enter directly The default is443, please enter:" isV2rayUnlockServerPortInput
             isV2rayUnlockServerPortInput=${isV2rayUnlockServerPortInput:-443}
 
             echo
-            yellow " 请填写可解锁流媒体的V2rayorXray服务器的用户UUID, E.g 4aeaf80d-f89e-46a2-b3dc-bb815eae75ba"
-            read -p "请填写用户UUID? 直接回车The default is111, please enter:" isV2rayUnlockServerUserIDInput
+            yellow " Please fill in the user UUID of the V2ray or Xray server that can unlock streaming media, E.g 4aeaf80d-f89e-46a2-b3dc-bb815eae75ba"
+            read -p "Please fill in user UUID? Enter directly The default is111, please enter:" isV2rayUnlockServerUserIDInput
             isV2rayUnlockServerUserIDInput=${isV2rayUnlockServerUserIDInput:-111}
 
 
@@ -4275,9 +4275,9 @@ function replaceAirUniverseConfigWARP(){
 
     echo
     green " =================================================="
-    yellow " 是否使用 DNS 解锁流媒体 Netflix HBO Disney 等流媒体网站"
-    green " 如需解锁请填入 解锁 Netflix 的DNS服务器的IP地址, E.g 8.8.8.8"
-    read -p "是否使用DNS解锁流媒体? 直接回车默认不解锁, 解锁please enterDNS服务器的IP地址:" isV2rayUnlockDNSInput
+    yellow " Whether to use DNS to unblock streaming sites like Netflix HBO Disney"
+    green " For unblocking, please fill in the IP address of the DNS server that unblocks Netflix, E.g 8.8.8.8"
+    read -p "Whether to use DNS to unblock streaming media? Enter directly by default Do not unlock, Unlock please enter the IP address of the DNS server:" isV2rayUnlockDNSInput
     isV2rayUnlockDNSInput=${isV2rayUnlockDNSInput:-n}
 
     V2rayDNSUnlockText="AsIs"
@@ -4332,17 +4332,17 @@ EOM
     echo
     echo
     green " =================================================="
-    yellow " 是否使用 Cloudflare WARP 解锁 流媒体 Netflix 等网站"
-    green " 1. 不使用解锁"
-    green " 2. 使用 WARP Sock5 代理解锁 推荐使用"
-    green " 3. 使用 WARP IPv6 解锁"
-    green " 4. pass转发到可解锁的v2rayorxray服务器解锁"
+    yellow " Whether to use Cloudflare WARP to unblock streaming sites like Netflix"
+    green " 1. Do not use unlock"
+    green " 2. Unblocking with WARP Sock5 proxy recommend using"
+    green " 3. Unlock with WARP IPv6"
+    green " 4. The pass is forwarded to the unlockable v2ray or xray server to unlock"
     echo
-    green " 默认选1 不解锁. 选择2,3解锁需要安装好 Wireguard and Cloudflare WARP, 可重新运行本脚本选择第一项安装".
-    red " 推荐先安装 Wireguard and Cloudflare WARP 后,再安装v2rayorxray. 实际上先安装v2rayorxray, 后安装Wireguard and Cloudflare WARP也没问题"
-    red " 但如果先安装v2rayorxray, 选了解锁googleor其他流媒体, 那么会暂时无法访问google和其他视频网站, 需要继续安装Wireguard and Cloudflare WARP解决"
+    green " Select 1 by default Do not unlock. Choose 2,3 to unlock need to install Wireguard and Cloudflare WARP, You can re-run this script and select the first item, Install".
+    red " recommend to Install Wireguard and Cloudflare WARP After that, then Install v2ray or xray. Actually install v2ray or xray first, After InstallWireguard and Cloudflare WARP is okay"
+    red " But if you install v2ray or xray first, Selected to unlock google or other streaming media, then temporarily unable to access google and other video sites, Need to continue Install Wireguard and Cloudflare WARP solution"
     echo
-    read -p "please enter? 直接回车默认选1 不解锁, Please enter pure numbers:" isV2rayUnlockWarpModeInput
+    read -p "please enter? Enter directly and select 1 by default Do not unlock, Please enter pure numbers:" isV2rayUnlockWarpModeInput
     isV2rayUnlockWarpModeInput=${isV2rayUnlockWarpModeInput:-1}
 
     V2rayUnlockVideoSiteRuleText=""
@@ -4358,7 +4358,7 @@ EOM
 
     if [[ -f "${configWARPPortFilePath}" ]]; then
         configWARPPortLocalServerPort="$(cat ${configWARPPortFilePath})"
-        configWARPPortLocalServerText="detected本机已安装 WARP Sock5, 端口号 ${configWARPPortLocalServerPort}"
+        configWARPPortLocalServerText="detected This machine has been installed WARP Sock5, port number ${configWARPPortLocalServerPort}"
     fi
     
     if [[ $isV2rayUnlockWarpModeInput == "1" ]]; then
@@ -4368,12 +4368,12 @@ EOM
             V2rayUnlockVideoSiteOutboundTagText="WARP_out"
 
             echo
-            read -p "please enterWARP Sock5 代理服务器地址? 直接回车默认本机 127.0.0.1, please enter:" unlockWARPServerIpInput
+            read -p "please enterWARP Sock5 proxy server address? Enter directly and default to this machine 127.0.0.1, please enter:" unlockWARPServerIpInput
             unlockWARPServerIpInput=${unlockWARPServerIpInput:-127.0.0.1}
 
             echo
             yellow " ${configWARPPortLocalServerText}"
-            read -p "please enterWARP Sock5 代理服务器端口号? 直接回车默认${configWARPPortLocalServerPort}, Please enter pure numbers:" unlockWARPServerPortInput
+            read -p "please enterWARP Sock5 proxy server port number? Enter directly by default ${configWARPPortLocalServerPort}, Please enter pure numbers:" unlockWARPServerPortInput
             unlockWARPServerPortInput=${unlockWARPServerPortInput:-$configWARPPortLocalServerPort}
 
         elif [[ $isV2rayUnlockWarpModeInput == "3" ]]; then
@@ -4383,8 +4383,8 @@ EOM
         elif [[ $isV2rayUnlockWarpModeInput == "4" ]]; then
 
             echo
-            green " 已选择4 pass转发到可解锁的v2rayorxray服务器解锁"
-            green " 可自行修改v2rayorxray配置, 在 outbounds 字段中增加一个tag为 V2Ray_out 的可解锁的v2ray服务器"
+            green " Selected 4 pass forward to unlockable v2ray or xray server to unlock"
+            green " You can modify the v2ray or xray configuration yourself, exist outbounds Add a tag to the field as V2Ray_out The unlockable v2ray server"
 
             V2rayUnlockVideoSiteOutboundTagText="V2Ray_out"
 
@@ -4395,19 +4395,19 @@ EOM
         echo
         echo
         green " =================================================="
-        yellow " please choose要解锁的流媒体网站:"
+        yellow " please choose the streaming site to unblock:"
         echo
-        green " 1. 不解锁"
-        green " 2. 解锁 Netflix 限制"
-        green " 3. 解锁 Youtube 和 Youtube Premium"
-        green " 4. 解锁 Pornhub, 解决视频变成玉米无法观看问题"
-        green " 5. 同时解锁 Netflix 和 Pornhub 限制"
-        green " 6. 同时解锁 Netflix, Youtube 和 Pornhub 限制"
-        green " 7. 同时解锁 Netflix, Hulu, HBO, Disney, Spotify 和 Pornhub 限制"
-        green " 8. 同时解锁 Netflix, Hulu, HBO, Disney, Spotify, Youtube 和 Pornhub 限制"
-        green " 9. 解锁 全部流媒体 包括 Netflix, Youtube, Hulu, HBO, Disney, BBC, Fox, niconico, dmm, Spotify, Pornhub 等"
+        green " 1. Do not unlock"
+        green " 2. unlock Netflix limit"
+        green " 3. unlock Youtube and Youtube Premium"
+        green " 4. unlock Pornhub, Solve the problem that the video becomes corn and cannot be watched"
+        green " 5. Simultaneously unlock Netflix and Pornhub limit"
+        green " 6. Simultaneously unlock Netflix, Youtube and Pornhub limit"
+        green " 7. Simultaneously unlock Netflix, Hulu, HBO, Disney, Spotify and Pornhub limit"
+        green " 8. Simultaneously unlock Netflix, Hulu, HBO, Disney, Spotify, Youtube and Pornhub limit"
+        green " 9. unlock All streaming include Netflix, Youtube, Hulu, HBO, Disney, BBC, Fox, niconico, dmm, Spotify, Pornhub "
         echo
-        read -p "please enter解锁选项? 直接回车默认选1 不解锁, Please enter pure numbers:" isV2rayUnlockVideoSiteInput
+        read -p "please enter unlock option? Enter directly and select 1 by default Do not unlock, Please enter pure numbers:" isV2rayUnlockVideoSiteInput
         isV2rayUnlockVideoSiteInput=${isV2rayUnlockVideoSiteInput:-1}
 
         if [[ $isV2rayUnlockVideoSiteInput == "2" ]]; then
@@ -4443,8 +4443,8 @@ EOM
 
     echo
     echo
-    yellow " 某大佬提供了可以解锁Netflix新加坡区的V2ray服务器, 不保证一直可用"
-    read -p "是否pass神秘力量解锁Netflix新加坡区? 直接回车默认不解锁, please enter[y/N]:" isV2rayUnlockGoNetflixInput
+    yellow " A big guy provides a V2ray server that can unlock Netflix Singapore, Do not guaranteed to always be available"
+    read -p "Whether to pass Mystic Force unlock Netflix Singapore? Enter directly by default Do not unlock, please enter[y/N]:" isV2rayUnlockGoNetflixInput
     isV2rayUnlockGoNetflixInput=${isV2rayUnlockGoNetflixInput:-n}
 
     v2rayConfigRouteGoNetflixInput=""
@@ -4500,14 +4500,14 @@ EOM
     echo
     echo
     green " =================================================="
-    yellow " please choose 避免弹出 Google reCAPTCHA 人机验证的方式"
+    yellow " please choose avoid popping Google reCAPTCHA CAPTCHA WAY"
     echo
-    green " 1. 不解锁"
-    green " 2. 使用 WARP Sock5 代理解锁"
-    green " 3. 使用 WARP IPv6 解锁 推荐使用"
-    green " 4. pass转发到可解锁的v2rayorxray服务器解锁"
+    green " 1. Do not unlock"
+    green " 2. use WARP Sock5 agent unlock"
+    green " 3. Unlock with WARP IPv6 recommend using"
+    green " 4. The pass is forwarded to the unlockable v2ray or xray server to unlock"
     echo
-    read -p "please enter解锁选项? 直接回车默认选1 不解锁, Please enter pure numbers:" isV2rayUnlockGoogleInput
+    read -p "please enter unlock option? Enter directly and select 1 by default Do not unlock, Please enter pure numbers:" isV2rayUnlockGoogleInput
     isV2rayUnlockGoogleInput=${isV2rayUnlockGoogleInput:-1}
 
     if [[ $isV2rayUnlockWarpModeInput == $isV2rayUnlockGoogleInput ]]; then
@@ -4518,7 +4518,7 @@ EOM
             V2rayUnlockVideoSiteRuleText="${V2rayUnlockVideoSiteRuleText:1}"
         fi
 
-        # 修复一个都不解锁的bug 都选1的bug
+        # 修复一个都Do not unlock的bug 都选1的bug
         if [[ -z "${V2rayUnlockVideoSiteOutboundTagText}" ]]; then
             V2rayUnlockVideoSiteOutboundTagText="IPv6_out"
             V2rayUnlockVideoSiteRuleText="\"test.com\""
@@ -4538,12 +4538,12 @@ EOM
         if [[ $isV2rayUnlockGoogleInput == "2" ]]; then
             V2rayUnlockGoogleOutboundTagText="WARP_out"
             echo
-            read -p "please enterWARP Sock5 代理服务器地址? 直接回车默认本机 127.0.0.1, please enter:" unlockWARPServerIpInput
+            read -p "please enterWARP Sock5 proxy server address? Enter directly and default to this machine 127.0.0.1, please enter:" unlockWARPServerIpInput
             unlockWARPServerIpInput=${unlockWARPServerIpInput:-127.0.0.1}
 
             echo
             yellow " ${configWARPPortLocalServerText}"
-            read -p "please enterWARP Sock5 代理服务器端口号? 直接回车默认${configWARPPortLocalServerPort}, Please enter pure numbers:" unlockWARPServerPortInput
+            read -p "please enterWARP Sock5 proxy server port number? Enter directly by default ${configWARPPortLocalServerPort}, Please enter pure numbers:" unlockWARPServerPortInput
             unlockWARPServerPortInput=${unlockWARPServerPortInput:-$configWARPPortLocalServerPort}           
 
         elif [[ $isV2rayUnlockGoogleInput == "3" ]]; then
@@ -4556,7 +4556,7 @@ EOM
             V2rayUnlockGoogleOutboundTagText="IPv4_out"
         fi
 
-        # 修复一个都不解锁的bug 都选1的bug
+        # 修复一个都Do not unlock的bug 都选1的bug
         if [[ -z "${V2rayUnlockVideoSiteOutboundTagText}" ]]; then
             V2rayUnlockVideoSiteOutboundTagText="IPv6_out"
             V2rayUnlockVideoSiteRuleText="\"test.com\""
@@ -4696,7 +4696,7 @@ EOF
     if [[ -z $1 ]]; then
         echo
         green " =================================================="
-        green " 重启 xray 和 air-universe 服务 "
+        green " reboot xray and air-universe Serve "
         systemctl restart xray.service
         airu restart
         green " =================================================="
@@ -4717,23 +4717,23 @@ EOF
 function manageAirUniverse(){
     echo -e ""
     green " =================================================="       
-    echo "    Air-Universe 管理脚本使用方法: "
+    echo "    Air-Universe How to use the management script: "
     echo 
-    echo "airu              - 显示管理菜单 (功能更多)"
-    echo "airu start        - 启动 Air-Universe"
-    echo "airu stop         - 停止 Air-Universe"
-    echo "airu restart      - 重启 Air-Universe"
-    echo "airu status       - 查看 Air-Universe 状态"
-    echo "airu enable       - 设置 Air-Universe 开机自启"
-    echo "airu disable      - 取消 Air-Universe 开机自启"
-    echo "airu log          - 查看 Air-Universe 日志"
-    echo "airu update x.x.x - 更新 Air-Universe 指定Version"
-    echo "airu install      - 安装 Air-Universe"
-    echo "airu uninstall    - 卸载 Air-Universe"
-    echo "airu version      - 查看 Air-Universe Version"
+    echo "airu              - Show admin menu (function more)"
+    echo "airu start        - start up Air-Universe"
+    echo "airu stop         - stop Air-Universe"
+    echo "airu restart      - reboot Air-Universe"
+    echo "airu status       - Check Air-Universe state"
+    echo "airu enable       - set up Air-Universe Auto-start"
+    echo "airu disable      - Cancel Air-Universe Auto-start"
+    echo "airu log          - Check Air-Universe log"
+    echo "airu update x.x.x - renew Air-Universe Specified version"
+    echo "airu install      - Install Air-Universe"
+    echo "airu uninstall    - uninstall Air-Universe"
+    echo "airu version      - Check Air-Universe Version"
     echo "------------------------------------------"
-    green " Air-Universe 配置文件 ${configAirUniverseConfigFilePath} "
-    green " Xray 配置文件 ${configAirUniverseXrayConfigFilePath}"
+    green " Air-Universe configuration file ${configAirUniverseConfigFilePath} "
+    green " Xray configuration file ${configAirUniverseXrayConfigFilePath}"
     green " =================================================="    
     echo
 }
@@ -4750,7 +4750,7 @@ function removeAirUniverse(){
     rm -rf ${configSSLCertPathV2board}
 
     crontab -r 
-    green " crontab 定时任务 已清除!"
+    green " crontab timed task cleared!"
     echo
 
     removeNginx
@@ -4828,16 +4828,16 @@ configNetflixMitmToken="-t token123"
 function installShareNetflixAccount(){
     echo
     green " ================================================== "
-    yellow " ready to installNetflix账号共享 服务器端程序"
-    yellow " 提供共享服务需要有一个Netflix账号 "
-    yellow " 所安装的服务器 需要已原生解锁Netflix"
-    red " 请务必用于私人用途 不要公开分享. Netflix也限制了同时在线人数"
+    yellow " ready to install Netflix account sharing server program"
+    yellow " A Netflix account is required to provide Shared Serve "
+    yellow " The installed server needs to have native unlock Netflix"
+    red " Please be sure to use it for private use. Do not share it publicly. Netflix also limits the number of existing online users at the same time."
     green " ================================================== "
 
     promptContinueOpeartion 
 
     echo
-    read -p "是否生成随机的 端口号? 直接回车默认 34567 不生成随机端口号, please enter[y/N]:" isNetflixMimePortInput
+    read -p "whether to generate random port number? Enter directly by default 34567 Do not generate random ports number, please enter[y/N]:" isNetflixMimePortInput
     isNetflixMimePortInput=${isNetflixMimePortInput:-n}
 
     if [[ $isNetflixMimePortInput == [Nn] ]]; then
@@ -4847,7 +4847,7 @@ function installShareNetflixAccount(){
     fi
 
     echo
-    read -p "是否生成随机的管理员token密码? 直接回车默认 token123 不生成随机token, please enter[y/N]:" isNetflixMimeTokenInput
+    read -p "Whether to generate a random administrator token password? Enter directly by default token123 Do not generate random token, please enter[y/N]:" isNetflixMimeTokenInput
     isNetflixMitmTokenInput=${isNetflixMitmTokenInput:-n}
 
     if [[ $isNetflixMitmTokenInput == [Nn] ]]; then
@@ -4891,21 +4891,21 @@ EOF
     #${sudoCmd} systemctl enable netflix_mitm.service
 
 cat > ${netflixMitmToolDownloadFolder}/netflix_mitm_readme <<-EOF
-用于给浏览器插件使用的管理员admin 的 token 为: ${configNetflixMitmToken}
+admin for browser plugins of token for: ${configNetflixMitmToken}
 
-服务器运行的端口号为: ${configNetflixMitmPort}
+The port the server is running on number is: ${configNetflixMitmPort}
 
 
-后续操作具体步骤如下:
+The specific steps for subsequent operations are as follows:
 
-1. 证书文件已生成, 默认在目录的 ${netflixMitmToolDownloadFolder}/ca/cert.crt 文件夹下, 请把cert.crt下载到本地
-2. 在你自己的客户端机器上,安装好证书cert.crt 然后开启 http 代理, 代理服务器地址为:你的ip:${configNetflixMitmPort}
+1. Certificate file has been generated, default exist directory ${netflixMitmToolDownloadFolder}/ca/cert.crt under the folder, Please download cert.crt locally
+2. exist on your own client machine,Install好Certificatecert.crt then turn on http acting, proxy server address is: your ip:${configNetflixMitmPort}
 
-chrome 可以用 SwitchyOmega 插件作为 http代理 https://github.com/FelisCatus/SwitchyOmega 
+chrome Can use SwitchyOmega plugin as http proxy https://github.com/FelisCatus/SwitchyOmega 
 
-新建一个情景E.g名字叫奈飞代理 输入代理http服务器 你的ip 端口 ${configNetflixMitmPort}   
+Create a new scenario E.g name is Netflix proxy Enter proxy httpServer your ip port ${configNetflixMitmPort}   
  
-然后在自动切换 菜单里面 添加奈飞的几个域名 选择走奈飞代理这个情景 就可以了
+Then exist automatically switch, add several Netflix domain names to the menu, and choose to use the Netflix proxy scenario.
 
 netflix.com
 netflix.net
@@ -4916,33 +4916,33 @@ nflxvideo.net
 
 
 3. 第一次使用需要上传的已登录Netflix账号的 cookie, 具体方法如下
-使用Netflix账号登录Netflix官网. 然后安装 EditThisCookie 这个浏览器插件. 添加一个key为admin, value 值为 ${configNetflixMitmToken} 
+使用Netflix账号登录Netflix官网. 然后Install EditThisCookie 这个浏览器插件. 添加一个key为admin, value 值为 ${configNetflixMitmToken} 
 
-一切已经完成, 其他设备就可以安装证书cert.crt, 使用http代理填入你的ip:${configNetflixMitmPort}, 就可以不需要账号看奈菲了
+一切已经完成, 其他设备就可以InstallCertificatecert.crt, 使用http代理填入你的ip:${configNetflixMitmPort}, 就可以Do not需要账号看奈菲了
 
 
 EOF
 
 	green " ================================================== "
-	green " Netflix账号共享 服务器端程序 Successful installation !"
-    green " 重启命令: systemctl restart netflix_mitm.service"
-	green " 查看运行状态命令:  systemctl status netflix_mitm.service "
-	green " 查看日志命令: journalctl -n 40 -u netflix_mitm.service "
+	green " Netflix account sharing server program Successful installation !"
+    green " reboot command: systemctl restart netflix_mitm.service"
+	green " View running status command:  systemctl status netflix_mitm.service "
+	green " View log command: journalctl -n 40 -u netflix_mitm.service "
     echo
-	green " 服务器运行的端口号为: ${configNetflixMitmPort}"
-	green " 用于给浏览器插件使用的管理员admin的token为: ${configNetflixMitmToken}"
-	green " 使用配置信息也可以查看 ${netflixMitmToolDownloadFolder}/netflix_mitm_readme "
+	green " The port number of the server running is: ${configNetflixMitmPort}"
+	green " The token for the administrator admin used by the browser plug-in is: ${configNetflixMitmToken}"
+	green " You can also check using configuration information ${netflixMitmToolDownloadFolder}/netflix_mitm_readme "
     echo
-    green " 后续操作具体步骤如下:"
-    green " 1. 证书文件已生成, 默认在当前目录的ca文件夹下, 请把cert.crt下载到本地"
-    green " 2. 在你自己的客户端机器上,安装好证书cert.crt 然后开启 http 代理, 代理服务器地址为:你的ip:${configNetflixMitmPort} "
-    green " chrome 可以用 SwitchyOmega 插件作为 http代理 https://github.com/FelisCatus/SwitchyOmega "
+    green " The specific steps for subsequent operations are as follows:"
+    green " 1. Certificate file has been generated, The default exists of the current directory's caunder the folder, Please download cert.crt locally"
+    green " 2. exist on your own client machine,Install Certificatecert.crt and enable http proxy, proxy server address is: your ip:${configNetflixMitmPort} "
+    green " chrome Can use SwitchyOmega plugin as http proxy https://github.com/FelisCatus/SwitchyOmega "
     echo
-    green " 3. 第一次使用需要上传的已登录Netflix账号的 cookie, 具体方法如下"
-    green " 使用Netflix账号登录Netflix官网. 然后安装 EditThisCookie 这个浏览器插件. 添加一个key为admin, value 值为 ${configNetflixMitmToken} "
-    green " EditThisCookie 浏览器插件 https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg"
+    green " 3. The first time to use the cookie of the logged-in Netflix account that needs to be uploaded, the specific method is as follows"
+    green " Log in to the Netflix official website with your Netflix account. Then Install EditThisCookie This browser plug-in. Add a key as admin, value value is ${configNetflixMitmToken} "
+    green " EditThisCookie browser plugin https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg"
     echo
-    green " 一切已经完成, 其他设备就可以安装证书cert.crt, 使用http代理填入你的ip:${configNetflixMitmPort}, 就可以不需要账号看奈菲了"
+    green " everything is done, Other devices can install Certificatecert.crt, fill in your ip using http proxy:${configNetflixMitmPort}, You can Do not need an account to watch Natflix"
     green " ================================================== "
 
 }
@@ -4953,7 +4953,7 @@ function removeShareNetflixAccount(){
     if [[ -f "${netflixMitmToolDownloadFolder}/mitm-vip-unlocker" ]]; then
         echo
         green " ================================================== "
-        red " 准备卸载已安装的 Netflix账号共享服务器端程序 mitm-vip-unlocker"
+        red " Prepare to uninstall the installed Netflix account sharing server program mitm-vip-unlocker"
         green " ================================================== "
         echo
 
@@ -4966,11 +4966,11 @@ function removeShareNetflixAccount(){
 
         echo
         green " ================================================== "
-        green "  Netflix账号共享服务器端程序 mitm-vip-unlocker 卸载完毕 !"
+        green "  Netflix account sharing server program mitm-vip-unlocker uninstall completed !"
         green " ================================================== "
         
     else
-        red " 系统没有安装 Netflix账号共享服务器端程序 mitm-vip-unlocker, 退出卸载"
+        red " system not installed Netflix account sharing server program mitm-vip-unlocker, exit uninstall"
     fi
 }
 
@@ -5034,22 +5034,22 @@ function startMenuOther(){
     
         green " =================================================="
         echo
-        green " 21. 安装 XrayR 服务器端"
-        green " 22. 停止, 重启, 查看日志等, 管理 XrayR 服务器端"
-        green " 23. 编辑 XrayR 配置文件 ${configXrayRConfigFilePath}"        
+        green " 21. Install XrayR Server side"
+        green " 22. stop, reboot, View logs, etc., manage XrayR Server side"
+        green " 23. edit XrayR configuration file ${configXrayRConfigFilePath}"        
         echo
-        green " 41. 安装 Soga 服务器端"
-        green " 42. 停止, 重启, 查看日志等, 管理 Soga 服务器端"
-        green " 43. 编辑 Soga 配置文件 ${configSogaConfigFilePath}"
+        green " 41. Install Soga Server side"
+        green " 42. stop, reboot, View logs, etc., manage Soga Server"
+        green " 43. edit Soga configuration file ${configSogaConfigFilePath}"
         echo
-        green " 62. 安装共享Netflix账号服务器端, 可以不用奈菲账号直接看奈菲"
-        red " 63. 卸载共享Netflix账号服务器端"
+        green " 62. Install the shared Netflix account on the server side, you can Do not use the Netflix account to watch Netflix directly"
+        red " 63. uninstall shared Netflix account Server"
         echo
-        green " 71. 工具脚本合集 by BlueSkyXN "
-        green " 72. 工具脚本合集 by jcnf "
+        green " 71. Tool Script Collection by BlueSkyXN "
+        green " 72. Tool Script Collection by jcnf "
         echo
-        green " 9. 返回上级菜单"
-        green " 0. 退出脚本"    
+        green " 9. Back to previous menu"
+        green " 0. exit script"    
 
     else
         green " =================================================="
@@ -5117,7 +5117,7 @@ function startMenuOther(){
         ;;
         * )
             clear
-            red "please enter正确数字 !"
+            red "please enter the correct number !"
             sleep 2s
             startMenuOther
         ;;
@@ -5150,58 +5150,58 @@ function start_menu(){
 
     if [[ ${configLanguage} == "cn" ]] ; then
     green " =================================================="
-    green " Linux 常用工具 一键安装脚本 | 2022-9-29 | 系统支持：centos7+ / debian9+ / ubuntu16.04+"
+    green " Linux Common tools One-click Install script | 2022-9-29 | systemsupport：centos7+ / debian9+ / ubuntu16.04+"
     green " =================================================="
-    green " 1. 安装 linux 内核 BBR Plus, 安装 WireGuard, 用于解锁 Netflix 限制 和避免弹出 Google reCAPTCHA 人机验证"
+    green " 1. Install linux kernel BBR Plus, Install WireGuard, for unlock Netflix limit andavoid popping Google reCAPTCHA Human verification"
     echo
-    green " 3. 用 VI 编辑 authorized_keys 文件 填入公钥, 用于SSH免密码登录 增加安全性"
-    green " 4. 修改 SSH 登陆端口号"
-    green " 5. 设置时区为北京时间"
-    green " 6. 用VI 编辑 /etc/hosts"
+    green " 3. Edit authorized_keys file with VI Fill in the public key for SSH password-free login to increase security"
+    green " 4. Modify SSH login port number"
+    green " 5. set up time zone is Tehran time"
+    green " 6. Edit /etc/hosts with VI"
     echo
-    green " 11. 安装 Vim Nano Micro 编辑器"
-    green " 12. 安装 Nodejs and PM2"
-    green " 13. 安装 Docker and Docker Compose"
-    red " 14. 卸载 Docker and Docker Compose"
-    green " 15. 设置 Docker Hub 镜像 "
-    green " 16. 安装 Portainer "
+    green " 11. Install Vim Nano Micro editor"
+    green " 12. Install Nodejs and PM2"
+    green " 13. Install Docker and Docker Compose"
+    red " 14. uninstall Docker and Docker Compose"
+    green " 15. set up Docker Hub mirror "
+    green " 16. Install Portainer "
     echo
-    green " 21. 安装 Cloudreve 云盘系统 "
-    red " 22. 卸载 Cloudreve 云盘系统 "
-    green " 23. 安装/更新/删除 Alist 云盘文件列表系统 "
+    green " 21. Install Cloudreve cloud disk system "
+    red " 22. uninstall Cloudreve cloud disk system "
+    green " 23. Install/renew/delete Alist cloud disk file list system "
     echo
-    green " 28. 安装 CasaOS 系统(包括 Nextcloud 云盘 和 AdGuard DNS 等)  "
-    red " 29. 卸载 CasaOS 系统 " 
+    green " 28. Install CasaOS system(include Nextcloud cloud disk and AdGuard DNS Wait)  "
+    red " 29. uninstall CasaOS system " 
     echo
-    green " 31. 安装 Grist 在线Excel表格(类似 Airtable)  "
-    red " 32. 卸载 Grist 在线Excel表格 " 
-    green " 33. 安装 NocoDB 在线Excel表格(类似 Airtable)  "
-    red " 34. 卸载 NocoDB 在线Excel表格 " 
-    green " 35. 安装 Etherpad 多人协作文档(类似 Word)  "
-    red " 36. 卸载 Etherpad 多人协作文档 "     
+    green " 31. Install Grist Exist line Excel table(similar Airtable)  "
+    red " 32. uninstall Grist Exist line Excel table " 
+    green " 33. Install NocoDB Exist line Excel table(similar Airtable)  "
+    red " 34. uninstall NocoDB Exist line Excel table " 
+    green " 35. Install Etherpad Multi-person collaborative document(similar Word)  "
+    red " 36. uninstall Etherpad Multi-person collaborative document "     
     echo
-    green " 41. 安装 Ghost Blog 博客系统 "
-    red " 42. 卸载 Ghost Blog 博客系统 "     
+    green " 41. Install Ghost Blog blog system "
+    red " 42. uninstall Ghost Blog blog system "     
     echo
 
-    green " 47. 安装视频会议系统 Jitsi Meet "
-    red " 48. 卸载 Jitsi Meet "
-    green " 49. Jitsi Meet 发起会议是否需要密码验证"
+    green " 47. Installvideo conferencing system Jitsi Meet "
+    red " 48. uninstall Jitsi Meet "
+    green " 49. Jitsi Meet Whether to initiate a meeting requires password authentication"
 
     echo
-    green " 51. 安装 Air-Universe 服务器端"
-    red " 52. 卸载 Air-Universe"
-    green " 53. 停止, 重启, 查看日志等, 管理 Air-Universe 服务器端"
-    green " 54. 配合 WARP (Wireguard) 使用IPV6 解锁 google人机验证和 Netflix等流媒体网站"
-    green " 55. 升级or降级 Air-Universe 到 1.0.0 or 0.9.2, 降级 Xray 到 1.5or1.4"
-    green " 56. 重新Application证书 并修改 Air-Universe 配置文件 ${configAirUniverseConfigFilePath}"
+    green " 51. Install Air-Universe Server side"
+    red " 52. uninstall Air-Universe"
+    green " 53. stop, reboot, View logs, etc., manage Air-Universe Server"
+    green " 54. Work with WARP (Wireguard) to use IPV6 unlock google man-machine authentication and Netflix and other streaming sites"
+    green " 55. Upgrade or downgrade Air-Universe to 1.0.0 or 0.9.2, downgrade Xray to 1.5 or 1.4"
+    green " 56. Re-ApplicationCertificate and modify Air-Universe configuration file ${configAirUniverseConfigFilePath}"
     echo 
-    green " 61. 单独Application域名SSL证书"
+    green " 61. Separate Application domain name SSLCertificate"
     echo
-    green " 77. 子菜单 安装 V2board 服务器端 XrayR, V2Ray-Poseidon, Soga"
+    green " 77. Submenu Install V2board Server side XrayR, V2Ray-Poseidon, Soga"
     echo
-    green " 88. 升级脚本"
-    green " 0. 退出脚本"
+    green " 88. upgrade script"
+    green " 0. exit script"
 
     else
     green " =================================================="
@@ -5407,7 +5407,7 @@ whoami
         ;;
         * )
             clear
-            red "please enter正确数字 !"
+            red "please enter the correct number !"
             sleep 2s
             start_menu
         ;;
