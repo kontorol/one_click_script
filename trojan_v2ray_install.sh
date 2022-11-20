@@ -546,6 +546,9 @@ function installSoftDownload(){
 
         elif ! rpm -qa | grep -qw git; then
 		    ${osSystemPackage} -y install wget curl git unzip
+            
+        elif ! rpm -qa | grep -qw unzip; then
+            ${osSystemPackage} -y install wget curl git unzip
 		fi
 	fi
 }
