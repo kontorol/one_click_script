@@ -338,7 +338,7 @@ function installSoftDownload(){
 
 # 更新本脚本
 function upgradeScript(){
-    wget -Nq --no-check-certificate -O ./install_kernel.sh "https://raw.githubusercontent.com/jinwyp/one_click_script/master/install_kernel.sh"
+    wget -Nq --no-check-certificate -O ./install_kernel.sh "https://raw.githubusercontent.com/kontorol/one_click_script/master/install_kernel.sh"
     green " The script was upgraded successfully! "
     chmod +x ./install_kernel.sh
     sleep 2s
@@ -2085,21 +2085,21 @@ function removeDebianKernel(){
 
 
 function installWARPGO(){
-    # wget -qN --no-check-certificate -O ./nf.sh https://raw.githubusercontent.com/jinwyp/SimpleNetflix/dev/nf.sh && chmod +x ./nf.sh
+    # wget -qN --no-check-certificate -O ./nf.sh https://raw.githubusercontent.com/kontorol/SimpleNetflix/dev/nf.sh && chmod +x ./nf.sh
 	wget -qN --no-check-certificate -O ./warp-go.sh https://raw.githubusercontent.com/fscarmen/warp/main/warp-go.sh && chmod +x ./warp-go.sh && ./warp-go.sh
 }
 
 
 function vps_netflix_jin(){
-    # wget -qN --no-check-certificate -O ./nf.sh https://raw.githubusercontent.com/jinwyp/SimpleNetflix/dev/nf.sh && chmod +x ./nf.sh
-	wget -qN --no-check-certificate -O ./nf.sh https://raw.githubusercontent.com/jinwyp/one_click_script/master/netflix_check.sh && chmod +x ./nf.sh && ./nf.sh
+    # wget -qN --no-check-certificate -O ./nf.sh https://raw.githubusercontent.com/kontorol/SimpleNetflix/dev/nf.sh && chmod +x ./nf.sh
+	wget -qN --no-check-certificate -O ./nf.sh https://raw.githubusercontent.com/kontorol/one_click_script/master/netflix_check.sh && chmod +x ./nf.sh && ./nf.sh
 }
 
 
 function vps_netflix_jin_auto(){
-    # wget -qN --no-check-certificate -O ./nf.sh https://raw.githubusercontent.com/jinwyp/SimpleNetflix/dev/nf.sh && chmod +x ./nf.sh
+    # wget -qN --no-check-certificate -O ./nf.sh https://raw.githubusercontent.com/kontorol/SimpleNetflix/dev/nf.sh && chmod +x ./nf.sh
     cd ${HOME}
-	wget -qN --no-check-certificate -O ./nf.sh https://raw.githubusercontent.com/jinwyp/one_click_script/master/netflix_check.sh && chmod +x ./nf.sh 
+	wget -qN --no-check-certificate -O ./nf.sh https://raw.githubusercontent.com/kontorol/one_click_script/master/netflix_check.sh && chmod +x ./nf.sh 
     
     echo
     green " =================================================="
