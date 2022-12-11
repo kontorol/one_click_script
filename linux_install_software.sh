@@ -46,14 +46,14 @@ function showHeaderGreen(){
 }
 function showHeaderRed(){
     echo
-    green " =================================================="
+    red " =================================================="
     for parameter in "$@"
     do
         if [[ -n "${parameter}" ]]; then
-            green " ${parameter}"
+            red " ${parameter}"
         fi
     done
-    green " =================================================="
+    red " =================================================="
     echo
 }
 function showInfoGreen(){
@@ -3911,16 +3911,17 @@ function downgradeXray(){
     echo
     green " 1. Do not downgrade Use the latest version"
 
-    if [[ "${isAirUniverseVersionInput}" == "1" || "${isAirUniverseVersionInput}" == "2" ]]; then
-        green " 2. 1.5.5"
-        green " 3. 1.5.4"
-        green " 4. 1.5.3"
+     if [[ "${isAirUniverseVersionInput}" == "1" || "${isAirUniverseVersionInput}" == "2" ]]; then
+        green " 2. 1.6.1"
+        green " 3. 1.6.0"
+        green " 4. 1.5.5"
+        green " 5. 1.5.4"
+        green " 6. 1.5.3"
     else
-        green " 5. 1.5.0"
-        green " 6. 1.4.5"
-        green " 7. 1.4.2"
-        green " 8. 1.4.0"
-        green " 9. 1.3.1"
+        green " 7. 1.5.0"
+        green " 8. 1.4.5"
+        green " 9. 1.4.0"
+        green " 0. 1.3.1"
     fi
 
     echo
@@ -3931,27 +3932,30 @@ function downgradeXray(){
     downloadXrayUrl="https://github.com/XTLS/Xray-core/releases/download/v${downloadXrayVersion}/Xray-linux-64.zip"
 
     if [[ "${isXrayVersionInput}" == "2" ]]; then
-        downloadXrayVersion="1.5.5"
+        downloadXrayVersion="1.6.1"
 
     elif [[ "${isXrayVersionInput}" == "3" ]]; then
-        downloadXrayVersion="1.5.4"
+        downloadXrayVersion="1.6.0"
 
     elif [[ "${isXrayVersionInput}" == "4" ]]; then
-        downloadXrayVersion="1.5.3"
+        downloadXrayVersion="1.5.5"
 
     elif [[ "${isXrayVersionInput}" == "5" ]]; then
-        downloadXrayVersion="1.5.0"
+        downloadXrayVersion="1.5.4"
 
     elif [[ "${isXrayVersionInput}" == "6" ]]; then
-        downloadXrayVersion="1.4.5"
+        downloadXrayVersion="1.5.3"
 
     elif [[ "${isXrayVersionInput}" == "7" ]]; then
-        downloadXrayVersion="1.4.2"
+        downloadXrayVersion="1.5.0"
 
     elif [[ "${isXrayVersionInput}" == "8" ]]; then
-        downloadXrayVersion="1.4.0"
+        downloadXrayVersion="1.4.5"
 
     elif [[ "${isXrayVersionInput}" == "9" ]]; then
+        downloadXrayVersion="1.4.0"
+
+    elif [[ "${isXrayVersionInput}" == "0" ]]; then
         downloadXrayVersion="1.3.1"
     else
         echo

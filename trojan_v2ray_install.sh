@@ -53,14 +53,14 @@ function showHeaderGreen(){
 }
 function showHeaderRed(){
     echo
-    green " =================================================="
+    red " =================================================="
     for parameter in "$@"
     do
         if [[ -n "${parameter}" ]]; then
-            green " ${parameter}"
+            red " ${parameter}"
         fi
     done
-    green " =================================================="
+    red " =================================================="
     echo
 }
 function showInfoGreen(){
@@ -318,7 +318,34 @@ function testLinuxPortUsage(){
 }
 
 
+# View port usage
+function checkPortUsage(){
+    # https://stackoverflow.com/questions/2013547/assigning-default-values-to-shell-variables-with-a-single-command-in-bash
 
+    portNum="${1:-80}"
+    # check port 80 is running
+    # http://www.letuknowit.com/post/98.html
+    # However, it is generally written as follows, an extra plus sign indicates that consecutive record separators are treated as one
+
+    osPort80=$(netstat -tupln | awk -F '[ ]+' '$1=="tcp"||$1=="tcp6"{print $4}' | grep -w "${portNum}")
+
+    if [ -n "$osPort80" ]; then
+        process80=$(netstat -tupln | grep -w "${portNum}" | awk -F '[ ]+' '{print $7}')
+
+        showHeaderRed "detected ${portNum} port is busy, the busy process is: ${process80} "
+
+        if [[ ${portNum} == "80" ]] ; then
+            green " close if necessary apache2 Please run the following command: "
+            green " Run following command to stop apache2: "
+            green " ${sudoCmd} systemctl stop apache2 "
+            green " ${sudoCmd} systemctl disable apache2 "
+        fi
+
+
+        promptContinueOpeartion
+    fi
+
+}
 
 
 
@@ -429,7 +456,7 @@ function changeLinuxSSHPort(){
         green "The setting is successful, please remember the set port number ${osSSHLoginPortInput}!"
         green "login server command: ssh -p ${osSSHLoginPortInput} root@111.111.111.your ip !"
     else
-        echo "Wrong port number entered! Range : 22,1025~65534"
+        red "Wrong port number entered! Range : 22,1025~65534. Exit !"
     fi
 }
 
@@ -487,9 +514,13 @@ function setLinuxDateZone(){
                 firewall-cmd --reload
             fi 
 
+            echo ""
+            echo "chrony sources:"
+
             chronyc sources
 
-            echo
+            echo ""
+            echo ""
         fi
         
     else
@@ -550,6 +581,7 @@ function installSoftDownload(){
         elif ! rpm -qa | grep -qw unzip; then
             ${osSystemPackage} -y install wget curl git unzip
 		fi
+
 	fi
 }
 
@@ -577,15 +609,19 @@ function installPackage(){
 # 
 # EOF
 
-        if ! rpm -qa | grep -qw iperf3; then
+         if ! rpm -qa | grep -qw iperf3; then
 			${sudoCmd} ${osSystemPackage} install -y epel-release
 
-            ${osSystemPackage} install -y curl wget git unzip zip tar bind-utils htop net-tools
-            ${osSystemPackage} install -y xz jq redhat-lsb-core 
+            ${osSystemPackage} install -y curl wget git unzip zip tar
+            ${osSystemPackage} install -y redhat-lsb-core 
+            ${osSystemPackage} install -y bind-utils net-tools
+            ${osSystemPackage} install -y xz jq
             ${osSystemPackage} install -y iputils
-            ${osSystemPackage} install -y iperf3
+            ${osSystemPackage} install -y iperf3 
+            ${osSystemPackage} install -y htop 
 		fi
-
+        yum clean all
+        
         ${osSystemPackage} update -y
 
 
@@ -918,6 +954,9 @@ function installBBR2(){
 }
 
 
+function installSWAP(){
+    bash <(wget --no-check-certificate -qO- 'https://www.moerats.com/usr/shell/swap.sh')
+}
 
 
 
@@ -1206,7 +1245,7 @@ function getHTTPSCertificateCheckEmail(){
 }
 function getHTTPSCertificateInputEmail(){
     echo
-    read -r -p "Please enter your email address to apply for a certificate:" acmeSSLRegisterEmailInput
+    read -r -p "Please enter your email address to apply for a SSL certificate:" acmeSSLRegisterEmailInput
     getHTTPSCertificateCheckEmail "email" "${acmeSSLRegisterEmailInput}"
 }
 function getHTTPSCertificateInputGoogleEABKey(){
@@ -1330,7 +1369,11 @@ function getHTTPSCertificateWithAcme(){
     # Apply for https certificate
 	mkdir -p ${configSSLCertPath}
 	mkdir -p ${configWebsitePath}
-	curl https://get.acme.sh | sh
+	
+    getHTTPSCertificateInputEmail
+
+	curl https://get.acme.sh | sh -s email=${acmeSSLRegisterEmailInput}
+
 
 
     echo
@@ -1346,14 +1389,14 @@ function getHTTPSCertificateWithAcme(){
     isDomainSSLFromLetInput=${isDomainSSLFromLetInput:-1}
     
     if [[ "$isDomainSSLFromLetInput" == "2" ]]; then
-        getHTTPSCertificateInputEmail
+
         acmeSSLDays="179"
         acmeSSLServerName="buypass"
         echo
         ${configSSLAcmeScriptPath}/acme.sh --register-account --accountemail ${acmeSSLRegisterEmailInput} --server buypass
         
     elif [[ "$isDomainSSLFromLetInput" == "3" ]]; then
-        getHTTPSCertificateInputEmail
+
         acmeSSLServerName="zerossl"
         echo
         ${configSSLAcmeScriptPath}/acme.sh --register-account -m ${acmeSSLRegisterEmailInput} --server zerossl
@@ -1362,7 +1405,7 @@ function getHTTPSCertificateWithAcme(){
         green " ================================================== "
         yellow " Please follow the link below to apply google Public CA  https://hostloc.com/thread-993780-1-1.html"
         yellow " For details, please refer to https://github.com/acmesh-official/acme.sh/wiki/Google-Public-CA"
-        getHTTPSCertificateInputEmail
+
         acmeSSLServerName="google"
         getHTTPSCertificateInputGoogleEABKey
         getHTTPSCertificateInputGoogleEABId
@@ -1396,6 +1439,8 @@ function getHTTPSCertificateWithAcme(){
         fi
         
         if [ -z "$1" ]; then
+
+            checkPortUsage "80"
  
             green " ================================================== "
             green " please choose http How to apply for a certificate: The default is to enter directly ${acmeDefaultText} "
@@ -8299,6 +8344,9 @@ function start_menu(){
         ;;
         82 )
             installBBR2
+        ;;
+        83 )
+            installSWAP
         ;;
         84 )
             firewallForbiden
