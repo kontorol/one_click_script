@@ -6996,7 +6996,9 @@ function installXUI(){
         green " =================================================="
 
         # wget -O x_ui_install.sh -N --no-check-certificate "https://raw.githubusercontent.com/sprov065/x-ui/master/install.sh" && chmod +x x_ui_install.sh && ./x_ui_install.sh
-        wget -O x_ui_install.sh -N --no-check-certificate "https://raw.githubusercontent.com/vaxilu/x-ui/master/install.sh" && chmod +x x_ui_install.sh && ./x_ui_install.sh
+        # wget -O x_ui_install.sh -N --no-check-certificate "https://raw.githubusercontent.com/vaxilu/x-ui/master/install.sh" && chmod +x x_ui_install.sh && ./x_ui_install.sh
+        wget -O x_ui_install.sh -N --no-check-certificate "https://raw.githubusercontent.com/hossinasaadi/x-ui/master/install.sh" && chmod +x x_ui_install.sh && ./x_ui_install.sh
+
 
         green "X-UI Visual management paneladdress http://${configSSLDomain}:54321"
         green " please ensure 54321 The port has been released, E.g check whether the linux firewall or VPS firewall 54321 port is enabled"
