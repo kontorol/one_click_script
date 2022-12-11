@@ -818,7 +818,7 @@ function installSoftOhMyZsh(){
 
 # Updated script
 function upgradeScript(){
-    wget -Nq --no-check-certificate -O ./trojan_v2ray_install.sh "https://raw.githubusercontent.com/jinwyp/one_click_script/master/trojan_v2ray_install.sh"
+    wget -Nq --no-check-certificate -O ./trojan_v2ray_install.sh "https://raw.githubusercontent.com/kontorol/one_click_script/master/trojan_v2ray_install.sh"
     green " The script was upgraded successfully! "
     chmod +x ./trojan_v2ray_install.sh
     sleep 2s
@@ -826,8 +826,8 @@ function upgradeScript(){
 }
 
 function installWireguard(){
-    bash <(wget -qO- https://github.com/jinwyp/one_click_script/raw/master/install_kernel.sh)
-    # wget -N --no-check-certificate https://github.com/jinwyp/one_click_script/raw/master/install_kernel.sh && chmod +x ./install_kernel.sh && ./install_kernel.sh
+    bash <(wget -qO- https://github.com/kontorol/one_click_script/raw/master/install_kernel.sh)
+    # wget -N --no-check-certificate https://github.com/kontorol/one_click_script/raw/master/install_kernel.sh && chmod +x ./install_kernel.sh && ./install_kernel.sh
 }
 
 
@@ -867,7 +867,7 @@ function vps_netflix2(){
 
 function vps_netflix_jin(){
     # wget -qN --no-check-certificate -O ./nf.sh https://raw.githubusercontent.com/jinwyp/SimpleNetflix/dev/nf.sh && chmod +x ./nf.sh
-	wget -qN --no-check-certificate -O ./nf.sh https://raw.githubusercontent.com/jinwyp/one_click_script/master/netflix_check.sh && chmod +x ./nf.sh && ./nf.sh
+	wget -qN --no-check-certificate -O ./nf.sh https://raw.githubusercontent.com/kontorol/one_click_script/master/netflix_check.sh && chmod +x ./nf.sh && ./nf.sh
 }
 
 
@@ -906,7 +906,7 @@ function vps_yabs(){
 	curl -sL yabs.sh | bash
 }
 function vps_bench(){
-    wget -N --no-check-certificate https://raw.githubusercontent.com/jinwyp/one_click_script/master/bench.sh && chmod +x bench.sh && bash bench.sh
+    wget -N --no-check-certificate https://raw.githubusercontent.com/kontorol/one_click_script/master/bench.sh && chmod +x bench.sh && bash bench.sh
 	# wget -N --no-check-certificate https://raw.githubusercontent.com/teddysun/across/master/bench.sh && chmod +x bench.sh && bash bench.sh
 }
 function vps_bench_dedicated(){
