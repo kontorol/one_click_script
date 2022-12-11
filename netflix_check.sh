@@ -612,9 +612,9 @@ function startNetflixTest(){
 
     echo
     green " =================================================="
-    green " Netflix 非自制剧解锁 检测脚本 By JinWYP"
-    red " 本脚本无法检测出使用 V2ray 服务器端路由规则解锁Netflix"
-    red " 需要在 V2ray 客户端上运行本脚本才可以检测成功"
+    green " Netflix non-self-made drama unblocking detection script"
+    red " This script cannot detect the use of V2ray server-side routing rules to unblock Netflix"
+    red " This script needs to be run on the V2ray client to detect successfully"
     green " =================================================="
     echo
 
@@ -630,13 +630,13 @@ function startNetflixTest(){
         testNetflixAll "ipv6"
         testNetflixAll "ipv4warp"
 
-        green " ===== Youtube Premium 准备开始检测 ====="
+        green " ===== Youtube Premium ready to start testing ====="
 
         testYoutubeAll "ipv4"
         testYoutubeAll "ipv6"
         testYoutubeAll "ipv4warp"
 
-        green " ===== Disney+ 准备开始检测 ====="
+        green " ===== Disney+ ready to start testing ====="
 
         testDisneyPlusAll "ipv4"
         testDisneyPlusAll "ipv6"
