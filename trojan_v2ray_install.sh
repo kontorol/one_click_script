@@ -6997,7 +6997,7 @@ function installXUI(){
 
         # wget -O x_ui_install.sh -N --no-check-certificate "https://raw.githubusercontent.com/sprov065/x-ui/master/install.sh" && chmod +x x_ui_install.sh && ./x_ui_install.sh
         # wget -O x_ui_install.sh -N --no-check-certificate "https://raw.githubusercontent.com/vaxilu/x-ui/master/install.sh" && chmod +x x_ui_install.sh && ./x_ui_install.sh
-        wget -O x_ui_install.sh -N --no-check-certificate "https://raw.githubusercontent.com/hossinasaadi/x-ui/master/install.sh" && chmod +x x_ui_install.sh && ./x_ui_install.sh
+        wget -O x_ui_install.sh -N --no-check-certificate "https://raw.githubusercontent.com/Nader-abdi/x-ui/develop/install.sh" && chmod +x x_ui_install.sh && ./x_ui_install.sh
 
 
         green "X-UI Visual management paneladdress http://${configSSLDomain}:54321"
